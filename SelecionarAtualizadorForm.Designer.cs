@@ -1,7 +1,7 @@
-﻿using CopiarExes;
+﻿using ExeBoard;
 using System.Windows.Forms;
 
-namespace CopiarExes
+namespace ExeBoard
 {
     partial class frmAtualizador
     {

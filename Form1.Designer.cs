@@ -1,6 +1,6 @@
-﻿namespace CopiarExes
+﻿namespace ExeBoard
 {
-    partial class frmCopiarExes
+    partial class frmExeBoard
     {
         /// <summary>
         ///  Required designer variable.
@@ -522,14 +522,14 @@
             timerStatusServidores.Interval = 1000;
             timerStatusServidores.Tick += timerStatusServidores_Tick;
             // 
-            // frmCopiarExes
+            // frmExeBoard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 665);
             Controls.Add(tabCopiarExes);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Name = "frmCopiarExes";
+            Name = "frmExeBoard";
             Text = "Copiar Exes v2.1 [2025]";
             FormClosing += frmCopiarExes_FormClosing;
             Load += frmCopiarExes_Load;

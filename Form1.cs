@@ -7,13 +7,14 @@ using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Text;
 using System.Windows.Forms;
-using static CopiarExes.frmAtualizador;
+using static ExeBoard.frmAtualizador;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace CopiarExes {
+namespace ExeBoard
+{
 
-    public partial class frmCopiarExes : Form
+    public partial class frmExeBoard : Form
     {
         // Importa a função do Windows para ler arquivos INI
         [DllImport("kernel32")]
@@ -21,7 +22,7 @@ namespace CopiarExes {
 
         string caminhoIni = Application.StartupPath + @"\Inicializar.ini";
 
-        public frmCopiarExes()
+        public frmExeBoard()
         {
             InitializeComponent();
         }
