@@ -1,0 +1,25 @@
+# Pastas de build
+bin/
+obj/
+
+# Configurações de usuário do Visual Studio
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Cache do Visual Studio
+.vs/
+
+# Logs e temporários
+*.log
+*.tmp
+
+# Arquivos de build do Windows
+*.exe
+*.dll
+*.pdb
+
+# Outros arquivos que não são essenciais
+*.cache
+*.db
