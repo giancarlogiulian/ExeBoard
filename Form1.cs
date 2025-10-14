@@ -502,7 +502,7 @@ namespace ExeBoard
                     {
                         string pastaClient = LerValorIni("CAMINHOS", "PASTA_CLIENT", caminhoIni);
                         string caminhoCompletoCliente = getCaminhoCompletoAplicacao(cliente, subDiretorio, pastaClient);
-                        string diretorioCompleto = getCaminhoCompletoAplicacao(null, pastaClient);
+                        string diretorioCompleto = getCaminhoCompletoAplicacao(null, pastaClient, subDiretorio);
 
                         cbGroupClientes.Items.Add(new ClienteItem
                         {
@@ -538,7 +538,7 @@ namespace ExeBoard
                     {
                         string pastaServer = LerValorIni("CAMINHOS", "PASTA_SERVER", caminhoIni);
                         string caminhoCompletoAplicacao = getCaminhoCompletoAplicacao(servidor, subDir, pastaServer);
-                        string diretorioCompleto = getCaminhoCompletoAplicacao(null, pastaServer);
+                        string diretorioCompleto = getCaminhoCompletoAplicacao(null, pastaServer, subDir);
                         cbGroupServidores.Items.Add(new ServidorItem
                         {
                             Nome = servidor,
@@ -621,33 +621,26 @@ namespace ExeBoard
                 PararServidor(servidor, false);
             }
         }
-
-        public string getCaminhoCompletoAplicacao(string item, string pastaClient)
+        public string getCaminhoCompletoAplicacao(string item, string pastaClient, string subDiretorios)
         {
-            string caminho = edtPastaDestino.Text;
+            string caminhoBase = edtPastaDestino.Text;
 
-            if (string.IsNullOrEmpty(item))
-                return Path.Combine(caminho, pastaClient);
+            if (string.IsNullOrEmpty(caminhoBase))
+                return string.Empty;
 
-            string nomeExe = item.ToString();
-            return Path.Combine(caminho, pastaClient, nomeExe);
+            // Monta caminho até pasta + subdiretório (se houver)
+            string caminho = string.IsNullOrWhiteSpace(subDiretorios)
+                ? Path.Combine(caminhoBase, pastaClient)
+                : Path.Combine(caminhoBase, pastaClient, subDiretorios);
+
+            // Se item estiver vazio, retorna só até o subdiretório
+            if (string.IsNullOrWhiteSpace(item))
+                return caminho;
+
+            // Caso contrário, adiciona o nome do .exe
+            return Path.Combine(caminho, item);
         }
 
-
-        public string getCaminhoCompletoAplicacao(string item, string subDiretorios, string pastaClient)
-        {
-
-            string caminho = edtPastaDestino.Text;
-            string nomeExe = item.ToString();
-            if (!string.IsNullOrWhiteSpace(subDiretorios))
-            {
-                // Se tiver subdiretórios, adiciona ao caminho
-                caminho = Path.Combine(caminho, pastaClient, subDiretorios);
-                return Path.Combine(caminho, nomeExe);
-            }
-
-            return caminho + "\\" + pastaClient + "\\" + nomeExe;
-        }
 
         private void encerrarClientes()
         {
@@ -679,10 +672,14 @@ namespace ExeBoard
 
             foreach (var item in cbGroupClientes.CheckedItems)
             {
-                string caminho = edtPastaDestino.Text;
-                string nomeExe = item.ToString();
-                string caminhoExe = getCaminhoCompletoAplicacao(nomeExe, pastaClient);
-                linhas.Add($"del \"{caminhoExe}\" /s /f /q");
+                if (item is ClienteItem cliente)
+                {
+                    string nomeExe = cliente.Nome;
+                    string subDiretorio = cliente.SubDiretorios; 
+                    string caminhoExe = getCaminhoCompletoAplicacao(nomeExe, pastaClient, subDiretorio);
+                    linhas.Add($"del \"{caminhoExe}\" /s /f /q");
+                }
+
             }
 
             linhas.Add("");
@@ -1400,8 +1397,9 @@ namespace ExeBoard
                             // Atualiza visualmente
                             AtualizarStatus(lblStatus, "Iniciado");
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            RegistrarLogServidores(ex.Message);
                             AtualizarStatus(lblStatus, "Não Encontrado");
                         }
                     }
@@ -1444,8 +1442,9 @@ namespace ExeBoard
 
                             AtualizarStatus(lblStatus, "Parado");
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            RegistrarLogServidores(ex.Message);
                             AtualizarStatus(lblStatus, "Não Encontrado");
                         }
                     }
@@ -1498,8 +1497,9 @@ namespace ExeBoard
 
                             AtualizarStatus(lblStatus, "Iniciado");
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            RegistrarLogServidores(ex.Message);
                             AtualizarStatus(lblStatus, "Não Encontrado");
                         }
                     }
