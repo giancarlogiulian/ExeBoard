@@ -32,9 +32,13 @@ namespace ExeBoard
             public string Nome { get; set; }
             public string Tipo { get; set; } // "Servico" ou "Aplicacao"
 
+            public string NomeServico { get; set; } // Nome do serviço sem .EXE
+
             public string SubDiretorios { get; set; } // Caso tiver outras pastas dentro da pasta server
 
             public string CaminhoCompletoAplicacao { get; set; } // "Servico" ou "Aplicacao"
+
+            public string DiretorioCompleto { get; set; } // Diretório do executavel
 
             public override string ToString()
             {
@@ -50,6 +54,8 @@ namespace ExeBoard
             public string SubDiretorios { get; set; } // Caso tiver outras pastas dentro da pasta server
 
             public string CaminhoCompletoCliente { get; set; } // "Servico" ou "Aplicacao"
+
+            public string DiretorioCompleto { get; set; } // Diretório do executavel
 
             public override string ToString()
             {
@@ -205,7 +211,7 @@ namespace ExeBoard
                 {
                     try
                     {
-                        ServiceController sc = new ServiceController(servidor.Nome);
+                        ServiceController sc = new ServiceController(servidor.NomeServico);
 
                         // Se estiver rodando, para primeiro
                         if (sc.Status != ServiceControllerStatus.Stopped &&
@@ -213,9 +219,9 @@ namespace ExeBoard
                         {
                             sc.Stop();
                             sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(10));
-                            RegistrarLogCopiarDados("Parou o serviço " + servidor.Nome);
+                            RegistrarLogCopiarDados("Parou o serviço " + servidor.NomeServico);
                             if (acionadoNaBandeja)
-                                MessageBox.Show($"Serviço {servidor.Nome} parado com sucesso.",
+                                MessageBox.Show($"Serviço {servidor.NomeServico} parado com sucesso.",
                                                 "Serviço Parado",
                                                 MessageBoxButtons.OK,
                                                 MessageBoxIcon.Information);
@@ -224,18 +230,18 @@ namespace ExeBoard
                         // Agora inicia novamente
                         sc.Start();
                         sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
-                        RegistrarLogCopiarDados("Reiniciou o serviço " + servidor.Nome);
+                        RegistrarLogCopiarDados("Reiniciou o serviço " + servidor.NomeServico);
                         if (acionadoNaBandeja)
-                            MessageBox.Show($"Serviço {servidor.Nome} reiniciado com sucesso.",
+                            MessageBox.Show($"Serviço {servidor.NomeServico} reiniciado com sucesso.",
                                             "Serviço Reiniciado",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
-                        RegistrarLogCopiarDados($"Erro ao reiniciar serviço {servidor.Nome}: {ex.Message}");
+                        RegistrarLogCopiarDados($"Erro ao reiniciar serviço {servidor.NomeServico}: {ex.Message}");
                         if (acionadoNaBandeja)
-                            MessageBox.Show($"Erro ao reiniciar serviço {servidor.Nome}: {ex.Message}",
+                            MessageBox.Show($"Erro ao reiniciar serviço {servidor.NomeServico}: {ex.Message}",
                                             "Erro",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Error);
@@ -291,11 +297,11 @@ namespace ExeBoard
                 {
                     try
                     {
-                        ServiceController sc = new ServiceController(servidor.Nome);
+                        ServiceController sc = new ServiceController(servidor.NomeServico);
                         if (sc.Status == ServiceControllerStatus.Stopped)
                         {
                             if (acionadoNaBandeja)
-                                MessageBox.Show($"Serviço {servidor.Nome} já está parado.", "Serviço não encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show($"Serviço {servidor.NomeServico} já está parado.", "Serviço não encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return; // Já está parado
                         }
 
@@ -303,17 +309,17 @@ namespace ExeBoard
                         {
                             sc.Stop();
                             sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(10));
-                            RegistrarLogCopiarDados("Parou o serviço " + servidor.Nome);
+                            RegistrarLogCopiarDados("Parou o serviço " + servidor.NomeServico);
                             if (acionadoNaBandeja)
-                                MessageBox.Show($"Serviço {servidor.Nome} parado com sucesso.", "Serviço Parado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show($"Serviço {servidor.NomeServico} parado com sucesso.", "Serviço Parado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         }
                     }
                     catch (Exception ex)
                     {
-                        RegistrarLogCopiarDados($"Erro ao parar serviço {servidor.Nome}: {ex.Message}");
+                        RegistrarLogCopiarDados($"Erro ao parar serviço {servidor.NomeServico}: {ex.Message}");
                         if (acionadoNaBandeja)
-                            MessageBox.Show($"Erro ao parar serviço {servidor.Nome}: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"Erro ao parar serviço {servidor.NomeServico}: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else if (servidor.Tipo == "Aplicacao")
@@ -356,13 +362,13 @@ namespace ExeBoard
                 {
                     try
                     {
-                        ServiceController sc = new ServiceController(servidor.Nome);
+                        ServiceController sc = new ServiceController(servidor.NomeServico);
 
                         if (sc.Status == ServiceControllerStatus.Running ||
                             sc.Status == ServiceControllerStatus.StartPending)
                         {
                             if (acionadoNaBandeja)
-                                MessageBox.Show($"Serviço {servidor.Nome} já está em execução.",
+                                MessageBox.Show($"Serviço {servidor.NomeServico} já está em execução.",
                                                 "Serviço em execução",
                                                 MessageBoxButtons.OK,
                                                 MessageBoxIcon.Information);
@@ -373,18 +379,18 @@ namespace ExeBoard
                         sc.Start();
                         sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
 
-                        RegistrarLogCopiarDados("Iniciou o serviço " + servidor.Nome);
+                        RegistrarLogCopiarDados("Iniciou o serviço " + servidor.NomeServico);
                         if (acionadoNaBandeja)
-                            MessageBox.Show($"Serviço {servidor.Nome} iniciado com sucesso.",
+                            MessageBox.Show($"Serviço {servidor.NomeServico} iniciado com sucesso.",
                                             "Serviço Iniciado",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
-                        RegistrarLogCopiarDados($"Erro ao iniciar serviço {servidor.Nome}: {ex.Message}");
+                        RegistrarLogCopiarDados($"Erro ao iniciar serviço {servidor.NomeServico}: {ex.Message}");
                         if (acionadoNaBandeja)
-                            MessageBox.Show($"Erro ao iniciar serviço {servidor.Nome}: {ex.Message}",
+                            MessageBox.Show($"Erro ao iniciar serviço {servidor.NomeServico}: {ex.Message}",
                                             "Erro",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Error);
@@ -496,13 +502,15 @@ namespace ExeBoard
                     {
                         string pastaClient = LerValorIni("CAMINHOS", "PASTA_CLIENT", caminhoIni);
                         string caminhoCompletoCliente = getCaminhoCompletoAplicacao(cliente, subDiretorio, pastaClient);
+                        string diretorioCompleto = getCaminhoCompletoAplicacao(null, pastaClient);
 
                         cbGroupClientes.Items.Add(new ClienteItem
                         {
                             Nome = cliente,
                             Categoria = categoria,
                             SubDiretorios = subDiretorio,
-                            CaminhoCompletoCliente = caminhoCompletoCliente
+                            CaminhoCompletoCliente = caminhoCompletoCliente,
+                            DiretorioCompleto = diretorioCompleto
                         });
                         cbGroupClientes.SetItemChecked(i, true);
                         RegistrarLogCopiarDados("Carregou a informação da aplicação cliente " + cliente + ". Parâmetro: " + clienteId);
@@ -521,19 +529,24 @@ namespace ExeBoard
                     string servidorId = $"Servidor{i}";
                     string tipoId = $"Tipo{i}";
                     string subDiretoriosId = $"SubDiretorios{i}";
+                    string nomeServicoId = $"NomeServico{i}";
                     string servidor = LerValorIni("APLICACOES_SERVIDORAS", servidorId, caminhoIni);
                     string tipo = LerValorIni("APLICACOES_SERVIDORAS", tipoId, caminhoIni);
+                    string nomeServico = LerValorIni("APLICACOES_SERVIDORAS", nomeServicoId, caminhoIni);
                     string subDir = LerValorIni("APLICACOES_SERVIDORAS", subDiretoriosId, caminhoIni);
                     if (!string.IsNullOrWhiteSpace(servidor) && !string.IsNullOrWhiteSpace(tipo))
                     {
-                        string pastaClient = LerValorIni("CAMINHOS", "PASTA_SERVER", caminhoIni);
-                        string caminhoCompletoAplicacao = getCaminhoCompletoAplicacao(servidor, subDir, pastaClient);
+                        string pastaServer = LerValorIni("CAMINHOS", "PASTA_SERVER", caminhoIni);
+                        string caminhoCompletoAplicacao = getCaminhoCompletoAplicacao(servidor, subDir, pastaServer);
+                        string diretorioCompleto = getCaminhoCompletoAplicacao(null, pastaServer);
                         cbGroupServidores.Items.Add(new ServidorItem
                         {
                             Nome = servidor,
                             Tipo = tipo,
                             CaminhoCompletoAplicacao = caminhoCompletoAplicacao,
-                            SubDiretorios = subDir
+                            NomeServico = nomeServico,
+                            SubDiretorios = subDir,
+                            DiretorioCompleto = diretorioCompleto
                         });
 
                         cbGroupServidores.SetItemChecked(i, true);
@@ -612,10 +625,14 @@ namespace ExeBoard
         public string getCaminhoCompletoAplicacao(string item, string pastaClient)
         {
             string caminho = edtPastaDestino.Text;
-            string nomeExe = item.ToString();
 
-            return caminho + "\\" + pastaClient + "\\" + nomeExe;
+            if (string.IsNullOrEmpty(item))
+                return Path.Combine(caminho, pastaClient);
+
+            string nomeExe = item.ToString();
+            return Path.Combine(caminho, pastaClient, nomeExe);
         }
+
 
         public string getCaminhoCompletoAplicacao(string item, string subDiretorios, string pastaClient)
         {
@@ -648,7 +665,7 @@ namespace ExeBoard
 
             List<string> linhas = new List<string>();
 
-            linhas.Add("@echo on");
+            linhas.Add("@echo off");
             linhas.Add("echo Finalizando aplicacoes clientes...");
 
             foreach (var item in cbGroupClientes.CheckedItems)
@@ -749,7 +766,7 @@ namespace ExeBoard
 
             List<string> linhas = new List<string>();
 
-            linhas.Add("@echo on");
+            linhas.Add("@echo off");
             linhas.Add("echo Copiando os arquivos do sistema...");
 
             foreach (var item in cbGroupClientes.CheckedItems)
@@ -758,8 +775,7 @@ namespace ExeBoard
 
                     string nomeExe = item.ToString(); // Ex: Cliente1.exe
 
-                    linhas.Add($"echo Copiando \"{de}\\{dePastaClient}\\{nomeExe}\" -> \"{cliente.CaminhoCompletoCliente}\"");
-                    linhas.Add($"copy \"{de}\\{dePastaClient}\\{nomeExe}\" \"{cliente.CaminhoCompletoCliente}\" /y");
+                    linhas.Add($"xcopy \"{de}\\{dePastaClient}\\{nomeExe}\" \"{cliente.DiretorioCompleto}\" /y");
                 }
             }
 
@@ -769,12 +785,8 @@ namespace ExeBoard
                 {
                     string nomeExe = item.ToString(); // Ex: Cliente1.exe
 
-                    string destino = servidor.CaminhoCompletoAplicacao;
-                    if (destino.EndsWith("\\"))
-                        destino = destino.Substring(0, servidor.CaminhoCompletoAplicacao.Length - 1);
-
                     // Monta o comando com xcopy
-                    linhas.Add($"xcopy \"{de}\\{dePastaServer}\\{nomeExe}\" \"{destino}\" /Y /F");
+                    linhas.Add($"xcopy \"{de}\\{dePastaServer}\\{nomeExe}\" \"{servidor.DiretorioCompleto}\" /Y /F");
                 }
             }
 
@@ -883,12 +895,12 @@ namespace ExeBoard
                     {
                         if (servidor.Tipo == "Servico")
                         {
-                            ServiceController sc = new ServiceController(servidor.Nome);
+                            ServiceController sc = new ServiceController(servidor.NomeServico);
                             if (sc.Status != ServiceControllerStatus.Running && sc.Status != ServiceControllerStatus.StartPending)
                             {
                                 sc.Start();
                                 sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
-                                RegistrarLogCopiarDados("Iniciou o servico " + servidor.Nome);
+                                RegistrarLogCopiarDados("Iniciou o servico " + servidor.NomeServico);
                             }
                         }
                         else if (servidor.Tipo == "Aplicacao")
@@ -1038,7 +1050,7 @@ namespace ExeBoard
                 // Abre o link no navegador padrão
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
-                    FileName = "https://github.com/nicochet01/CopiarExes",
+                    FileName = "https://github.com/giancarlogiulian/ExeBoard",
                     UseShellExecute = true
                 });
             }
@@ -1176,7 +1188,14 @@ namespace ExeBoard
 
                     // Cria o Label de status
                     Label lblStatus = new Label();
-                    lblStatus.Location = new Point(200, y + 1);
+
+                    using (Graphics g = groupboxServidores.CreateGraphics())
+                    {
+                        SizeF tamanhoTexto = g.MeasureString(chk.Text, chk.Font);
+                        int posX = chk.Location.X + (int)tamanhoTexto.Width + 20;
+                        lblStatus.Location = new Point(posX, y + 1);
+                    }
+
                     lblStatus.Font = new Font("Segoe UI", 12, FontStyle.Bold);
                     lblStatus.AutoSize = true;
 
@@ -1234,7 +1253,7 @@ namespace ExeBoard
             {
                 if (servidor.Tipo == "Servico")
                 {
-                    ServiceController sc = new ServiceController(servidor.Nome);
+                    ServiceController sc = new ServiceController(servidor.NomeServico);
                     switch (sc.Status)
                     {
                         case ServiceControllerStatus.Running:
@@ -1367,10 +1386,10 @@ namespace ExeBoard
                         {
                             if (servidor.Tipo == "Servico")
                             {
-                                ServiceController sc = new ServiceController(servidor.Nome);
+                                ServiceController sc = new ServiceController(servidor.NomeServico);
                                 sc.Start();
                                 sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
-                                RegistrarLogServidores("Iniciou o serviço " + servidor.Nome);
+                                RegistrarLogServidores("Iniciou o serviço " + servidor.NomeServico);
                             }
                             else if (servidor.Tipo == "Aplicacao")
                             {
@@ -1409,10 +1428,10 @@ namespace ExeBoard
                         {
                             if (servidor.Tipo == "Servico")
                             {
-                                ServiceController sc = new ServiceController(servidor.Nome);
+                                ServiceController sc = new ServiceController(servidor.NomeServico);
                                 sc.Stop();
                                 sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(10));
-                                RegistrarLogServidores("Parou o serviço " + servidor.Nome);
+                                RegistrarLogServidores("Parou o serviço " + servidor.NomeServico);
                             }
                             else if (servidor.Tipo == "Aplicacao")
                             {
@@ -1453,17 +1472,17 @@ namespace ExeBoard
                         {
                             if (servidor.Tipo == "Servico")
                             {
-                                ServiceController sc = new ServiceController(servidor.Nome);
+                                ServiceController sc = new ServiceController(servidor.NomeServico);
                                 if (sc.Status == ServiceControllerStatus.Running)
                                 {
                                     sc.Stop();
                                     sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(10));
-                                    RegistrarLogServidores("Parou o serviço " + servidor.Nome);
+                                    RegistrarLogServidores("Parou o serviço " + servidor.NomeServico);
                                 }
 
                                 sc.Start();
                                 sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
-                                RegistrarLogServidores("Iniciou o serviço " + servidor.Nome);
+                                RegistrarLogServidores("Iniciou o serviço " + servidor.NomeServico);
                             }
                             else if (servidor.Tipo == "Aplicacao")
                             {
