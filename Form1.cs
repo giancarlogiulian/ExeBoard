@@ -160,7 +160,7 @@ namespace ExeBoard
                             RegistrarLogCopiarDados($"Abrindo sistema {cliente.Nome} da categoria {categoria}");
                             Process.Start(new ProcessStartInfo
                             {
-                                FileName = cliente.CaminhoCompletoCliente, // precisa ser o caminho completo do .exe
+                                FileName = getCaminhoCompletoAplicacao(cliente.Nome, cliente.DiretorioCompleto, null), // precisa ser o caminho completo do .exe
                                 UseShellExecute = true
                             });
                         });
