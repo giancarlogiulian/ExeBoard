@@ -54,7 +54,7 @@ namespace CopiarExes {
                         "DE_PASTA_CLIENT=EXES\n" +
                         "DE_PASTA_SERVER=EXES\n" +
                         "DE_PASTA_DADOS=BD\n" +
-                        "PARA=C:\\Viasoft\n" +
+                        "PARA=C:\\\n" +
                         "PASTA_CLIENT=Client\n" +
                         "PASTA_SERVER=Server\n" +
                         "PASTA_DADOS=Dados\n\n" +
