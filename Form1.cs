@@ -90,43 +90,29 @@ namespace CopiarExes {
 
         private void CarregarDadosDeConfiguracao()
         {
-            // --- PARTE 1: CONFIGURAR E LIMPAR AS TABELAS ---
+            // --- LIMPA E CONFIGURA AS NOVAS LISTAS ---
+            clbClientes.Items.Clear();
+            clbServidores.Items.Clear();
 
-            // Configura a tabela de Clientes
-            dgvConfigClientes.Rows.Clear(); // Limpa dados antigos
-            if (dgvConfigClientes.Columns.Count == 0) // Adiciona colunas apenas se não existirem
-            {
-                dgvConfigClientes.Columns.Add("Nome", "Nome do Executável");
-                dgvConfigClientes.Columns.Add("Categoria", "Categoria");
-                dgvConfigClientes.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvConfigClientes.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            }
-
-            // Configura a tabela de Servidores
-            dgvConfigServidores.Rows.Clear();
-            if (dgvConfigServidores.Columns.Count == 0) // Adiciona colunas apenas se não existirem
-            {
-                dgvConfigServidores.Columns.Add("Nome", "Nome do Serviço/App");
-                dgvConfigServidores.Columns.Add("Tipo", "Tipo (Servico/Aplicacao)");
-                dgvConfigServidores.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvConfigServidores.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            }
+            // Diz às listas para usarem a propriedade "Nome" dos objetos para exibição
+            clbClientes.DisplayMember = "Nome";
+            clbServidores.DisplayMember = "Nome";
 
             RegistrarLogCopiarDados("Carregando dados na aba de configurações...");
 
-            // --- PARTE 2: LER O ARQUIVO .INI E POPULAR AS TABELAS ---
+            // --- LÊ O ARQUIVO .INI E POPULA AS LISTAS COM OBJETOS ---
 
             // Carregar Clientes
             string countClientesStr = LerValorIni("APLICACOES_CLIENTE", "Count", caminhoIni);
             if (int.TryParse(countClientesStr, out int countClientes))
             {
-                for (int i = 0; i <= countClientes; i++)
+                for (int i = 0; i < countClientes; i++)
                 {
-                    string cliente = LerValorIni("APLICACOES_CLIENTE", $"Cliente{i}", caminhoIni);
+                    string clienteNome = LerValorIni("APLICACOES_CLIENTE", $"Cliente{i}", caminhoIni);
                     string categoria = LerValorIni("APLICACOES_CLIENTE", $"Categoria{i}", caminhoIni);
-                    if (!string.IsNullOrWhiteSpace(cliente))
+                    if (!string.IsNullOrWhiteSpace(clienteNome))
                     {
-                        dgvConfigClientes.Rows.Add(cliente, categoria);
+                        clbClientes.Items.Add(new ClienteItem { Nome = clienteNome, Categoria = categoria });
                     }
                 }
             }
@@ -135,21 +121,20 @@ namespace CopiarExes {
             string countServidoresStr = LerValorIni("APLICACOES_SERVIDORAS", "Count", caminhoIni);
             if (int.TryParse(countServidoresStr, out int countServidores))
             {
-                for (int i = 0; i <= countServidores; i++)
+                for (int i = 0; i < countServidores; i++)
                 {
-                    string servidor = LerValorIni("APLICACOES_SERVIDORAS", $"Servidor{i}", caminhoIni);
+                    string servidorNome = LerValorIni("APLICACOES_SERVIDORAS", $"Servidor{i}", caminhoIni);
                     string tipo = LerValorIni("APLICACOES_SERVIDORAS", $"Tipo{i}", caminhoIni);
-                    if (!string.IsNullOrWhiteSpace(servidor))
+                    if (!string.IsNullOrWhiteSpace(servidorNome))
                     {
-                        dgvConfigServidores.Rows.Add(servidor, tipo);
+                        clbServidores.Items.Add(new ServidorItem { Nome = servidorNome, Tipo = tipo });
                     }
                 }
             }
 
+            configuracoesForamAlteradas = false; // Reseta a bandeira de alterações ao carregar
             RegistrarLogCopiarDados("Dados de configuração carregados.");
-
-            // Atualiza o estado dos botões após carregar
-            AtualizarEstadoBotoesConfig();
+            AtualizarEstadoBotoesConfig(); // Chama o novo "cérebro"
         }
 
         public class ServidorItem
@@ -1645,60 +1630,6 @@ namespace CopiarExes {
             AtualizarBotoes();
         }
 
-        private void btnAdicionarCliente_Click(object sender, EventArgs e)
-        {
-            // Cria uma janela de diálogo para abrir arquivos
-            using (OpenFileDialog dialogo = new OpenFileDialog())
-            {
-                dialogo.Title = "Selecione a Aplicação Cliente";
-                dialogo.Filter = "Aplicações (*.exe)|*.exe";
-
-                // Se o usuário escolher um arquivo e clicar em "OK"
-                if (dialogo.ShowDialog() == DialogResult.OK)
-                {
-                    string nomeDoArquivo = System.IO.Path.GetFileName(dialogo.FileName);
-
-                    // ===============================================
-                    // --- INÍCIO DA NOVA VALIDAÇÃO DE DUPLICATAS ---
-                    // ===============================================
-                    bool jaExiste = false;
-                    foreach (DataGridViewRow row in dgvConfigClientes.Rows)
-                    {
-                        // Verifica se o valor da célula não é nulo antes de comparar
-                        if (row.Cells["Nome"].Value != null &&
-                            // Compara o nome do arquivo, ignorando se é maiúsculo ou minúsculo
-                            string.Equals(row.Cells["Nome"].Value.ToString(), nomeDoArquivo, StringComparison.OrdinalIgnoreCase))
-                        {
-                            jaExiste = true;
-                            break; // Se já achamos, não precisa continuar procurando
-                        }
-                    }
-
-                    if (jaExiste)
-                    {
-                        // Se o item já existe, avisa o usuário e não faz mais nada.
-                        MessageBox.Show($"A aplicação '{nomeDoArquivo}' já existe na lista.",
-                                        "Item Duplicado",
-                                        MessageBoxButtons.OK,
-                                        MessageBoxIcon.Warning);
-                        return; // O comando 'return' sai imediatamente do método.
-                    }
-                    // ===============================================
-                    // --- FIM DA VALIDAÇÃO DE DUPLICATAS ---
-                    // ===============================================
-
-                    // Se passou pela validação, adiciona o novo item
-                    dgvConfigClientes.Rows.Add(nomeDoArquivo, "Categoria Padrão");
-
-                    RegistrarLogCopiarDados($"Aplicação cliente '{nomeDoArquivo}' adicionada à lista de configuração.");
-
-                    configuracoesForamAlteradas = true;
-
-                    AtualizarEstadoBotoesConfig();
-                }
-            }
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
 
@@ -1718,68 +1649,66 @@ namespace CopiarExes {
 
         }
 
+        private void btnEditarGlobal_Click(object sender, EventArgs e)
+        {
+            // A lógica para Marcar/Desmarcar todos os itens.
+            bool marcar = (btnEditarGlobal.Text == "Marcar Todos");
+            for (int i = 0; i < clbClientes.Items.Count; i++) { clbClientes.SetItemChecked(i, marcar); }
+            for (int i = 0; i < clbServidores.Items.Count; i++) { clbServidores.SetItemChecked(i, marcar); }
+            btnEditarGlobal.Text = marcar ? "Desmarcar Todos" : "Marcar Todos";
+        }
+
+        private void btnRemoverGlobal_Click(object sender, EventArgs e)
+        {
+            int totalSelecionado = clbClientes.CheckedItems.Count + clbServidores.CheckedItems.Count;
+            if (totalSelecionado > 0)
+            {
+                if (MessageBox.Show($"Você tem certeza que deseja remover {totalSelecionado} item(ns) selecionado(s)?", "Confirmar Remoção", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    while (clbClientes.CheckedItems.Count > 0) { clbClientes.Items.Remove(clbClientes.CheckedItems[0]); }
+                    while (clbServidores.CheckedItems.Count > 0) { clbServidores.Items.Remove(clbServidores.CheckedItems[0]); }
+
+                    RegistrarLogCopiarDados($"{totalSelecionado} item(ns) removido(s) da lista de configuração.");
+                    configuracoesForamAlteradas = true;
+                    AtualizarEstadoBotoesConfig();
+                }
+            }
+        }
+
         private void btnSalvarConfiguracoes_Click(object sender, EventArgs e)
         {
-            // Pede uma confirmação final ao usuário
-            if (MessageBox.Show("Você tem certeza que deseja salvar todas as alterações no arquivo de configuração?",
-                                  "Confirmar",
-                                  MessageBoxButtons.YesNo,
-                                  MessageBoxIcon.Question) == DialogResult.No)
+            if (MessageBox.Show("Deseja salvar as alterações no arquivo de configuração?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
-                return; // Se o usuário disser não, cancela a operação
+                return;
             }
-
             try
             {
                 RegistrarLogCopiarDados("Salvando alterações no arquivo Inicializar.ini...");
 
-                // --- SALVANDO APLICAÇÕES CLIENTE ---
-
-                // Limpa a seção antiga de clientes no arquivo .ini
                 WritePrivateProfileString("APLICACOES_CLIENTE", null, null, caminhoIni);
-
                 int i = 0;
-                foreach (DataGridViewRow row in dgvConfigClientes.Rows)
+                foreach (ClienteItem item in clbClientes.Items)
                 {
-                    string nome = row.Cells["Nome"].Value?.ToString() ?? "";
-                    string categoria = row.Cells["Categoria"].Value?.ToString() ?? "";
-
-                    WritePrivateProfileString("APLICACOES_CLIENTE", $"Cliente{i}", nome, caminhoIni);
-                    WritePrivateProfileString("APLICACOES_CLIENTE", $"Categoria{i}", categoria, caminhoIni);
-                    WritePrivateProfileString("APLICACOES_CLIENTE", $"SubDiretorios{i}", "", caminhoIni); // Mantém a estrutura
+                    WritePrivateProfileString("APLICACOES_CLIENTE", $"Cliente{i}", item.Nome, caminhoIni);
+                    WritePrivateProfileString("APLICACOES_CLIENTE", $"Categoria{i}", item.Categoria, caminhoIni);
+                    WritePrivateProfileString("APLICACOES_CLIENTE", $"SubDiretorios{i}", item.SubDiretorios ?? "", caminhoIni);
                     i++;
                 }
-                // Escreve a contagem final de clientes
-                WritePrivateProfileString("APLICACOES_CLIENTE", "Count", dgvConfigClientes.Rows.Count.ToString(), caminhoIni);
+                WritePrivateProfileString("APLICACOES_CLIENTE", "Count", clbClientes.Items.Count.ToString(), caminhoIni);
 
-
-                // --- SALVANDO APLICAÇÕES/SERVIÇOS SERVIDORES ---
-
-                // Limpa a seção antiga de servidores no arquivo .ini
                 WritePrivateProfileString("APLICACOES_SERVIDORAS", null, null, caminhoIni);
-
                 i = 0;
-                foreach (DataGridViewRow row in dgvConfigServidores.Rows)
+                foreach (ServidorItem item in clbServidores.Items)
                 {
-                    string nome = row.Cells["Nome"].Value?.ToString() ?? "";
-                    string tipo = row.Cells["Tipo"].Value?.ToString() ?? "";
-
-                    WritePrivateProfileString("APLICACOES_SERVIDORAS", $"Servidor{i}", nome, caminhoIni);
-                    WritePrivateProfileString("APLICACOES_SERVIDORAS", $"Tipo{i}", tipo, caminhoIni);
-                    WritePrivateProfileString("APLICACOES_SERVIDORAS", $"SubDiretorios{i}", "", caminhoIni); // Mantém a estrutura
+                    WritePrivateProfileString("APLICACOES_SERVIDORAS", $"Servidor{i}", item.Nome, caminhoIni);
+                    WritePrivateProfileString("APLICACOES_SERVIDORAS", $"Tipo{i}", item.Tipo, caminhoIni);
+                    WritePrivateProfileString("APLICACOES_SERVIDORAS", $"SubDiretorios{i}", item.SubDiretorios ?? "", caminhoIni);
                     i++;
                 }
-                // Escreve a contagem final de servidores
-                WritePrivateProfileString("APLICACOES_SERVIDORAS", "Count", dgvConfigServidores.Rows.Count.ToString(), caminhoIni);
+                WritePrivateProfileString("APLICACOES_SERVIDORAS", "Count", clbServidores.Items.Count.ToString(), caminhoIni);
 
-                // --- FINALIZAÇÃO ---
-
-                // Reseta a "bandeira" de alterações, pois agora está tudo salvo
                 configuracoesForamAlteradas = false;
-
-                // Atualiza o estado dos botões (vai desabilitar Salvar e Cancelar)
                 AtualizarEstadoBotoesConfig();
-
                 RegistrarLogCopiarDados("Alterações salvas com sucesso.");
                 MessageBox.Show("Alterações salvas com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1790,95 +1719,120 @@ namespace CopiarExes {
             }
         }
 
-        private void btnAdicionarExeServidor_Click(object sender, EventArgs e)
+        private void btnCancelarAlteracoes_Click(object sender, EventArgs e)
         {
-            // Cria uma janela de diálogo para abrir arquivos
-            using (OpenFileDialog dialogo = new OpenFileDialog())
-            {
-                dialogo.Title = "Selecione a Aplicação Servidora (.exe)";
-                dialogo.Filter = "Aplicações (*.exe)|*.exe";
-
-                if (dialogo.ShowDialog() == DialogResult.OK)
-                {
-                    string nomeDoArquivo = System.IO.Path.GetFileName(dialogo.FileName);
-
-                    // --- VALIDAÇÃO DE DUPLICATAS PARA SERVIDORES ---
-                    bool jaExiste = false;
-                    foreach (DataGridViewRow row in dgvConfigServidores.Rows)
-                    {
-                        if (row.Cells["Nome"].Value != null &&
-                            string.Equals(row.Cells["Nome"].Value.ToString(), nomeDoArquivo, StringComparison.OrdinalIgnoreCase))
-                        {
-                            jaExiste = true;
-                            break;
-                        }
-                    }
-
-                    if (jaExiste)
-                    {
-                        MessageBox.Show($"O item '{nomeDoArquivo}' já existe na lista de servidores.",
-                                        "Item Duplicado",
-                                        MessageBoxButtons.OK,
-                                        MessageBoxIcon.Warning);
-                        return;
-                    }
-                    // --- FIM DA VALIDAÇÃO ---
-
-                    dgvConfigServidores.Rows.Add(nomeDoArquivo, "Aplicacao");
-
-                    RegistrarLogCopiarDados($"Aplicação servidora '{nomeDoArquivo}' adicionada à lista de configuração.");
-
-                    configuracoesForamAlteradas = true;
-
-                    AtualizarEstadoBotoesConfig();
-                }
-            }
+            CarregarDadosDeConfiguracao();
+            RegistrarLogCopiarDados("Alterações nas configurações foram canceladas.");
         }
 
         private void AtualizarEstadoBotoesConfig()
         {
-            // --- Lógica para o botão EDITAR ---
-            bool temItens = dgvConfigClientes.Rows.Count > 0 || dgvConfigServidores.Rows.Count > 0;
+            // Verifica se há itens em qualquer uma das listas
+            bool temItens = clbClientes.Items.Count > 0 || clbServidores.Items.Count > 0;
+
+            // O botão de "Editar" (Marcar Todos) só funciona se houver itens
             btnEditarGlobal.Enabled = temItens;
 
-            // --- Lógica para os botões SALVAR e CANCELAR ---
-            // Eles só são habilitados se houver alterações pendentes.
+            // Verifica se há itens MARCADOS em qualquer uma das listas
+            bool temItensMarcados = clbClientes.CheckedItems.Count > 0 || clbServidores.CheckedItems.Count > 0;
+
+            // O botão de "Remover" só funciona se houver itens marcados
+            btnRemoverGlobal.Enabled = temItensMarcados;
+
+            // Os botões "Salvar" e "Cancelar" só funcionam se houver alterações pendentes
             btnSalvarConfiguracoes.Enabled = configuracoesForamAlteradas;
             btnCancelarAlteracoes.Enabled = configuracoesForamAlteradas;
+        }
 
-            // --- Lógica para o botão REMOVER ---
-            bool algumCheckboxMarcado = false;
-            if (emModoEdicaoGlobal) // Só verifica se estivermos em modo de edição
+        private void btnAdicionarExeServidor_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialogo = new OpenFileDialog())
             {
-                // Procura por checkboxes marcados nos Clientes
-                foreach (DataGridViewRow row in dgvConfigClientes.Rows)
+                dialogo.Title = "Selecione a(s) Aplicação(ões) Servidora (.exe)";
+                dialogo.Filter = "Aplicações (*.exe)|*.exe";
+                dialogo.Multiselect = true;
+
+                if (dialogo.ShowDialog() == DialogResult.OK)
                 {
-                    if (Convert.ToBoolean(row.Cells["colunaCheckbox"].Value))
+                    int adicionados = 0;
+                    foreach (string caminhoCompleto in dialogo.FileNames)
                     {
-                        algumCheckboxMarcado = true;
-                        break; // Achou um, não precisa procurar mais
-                    }
-                }
-                // Se ainda não achou, procura nos Servidores
-                if (!algumCheckboxMarcado)
-                {
-                    foreach (DataGridViewRow row in dgvConfigServidores.Rows)
-                    {
-                        if (Convert.ToBoolean(row.Cells["colunaCheckbox"].Value))
+                        string nomeDoArquivo = Path.GetFileName(caminhoCompleto);
+                        bool jaExiste = clbServidores.Items.OfType<ServidorItem>().Any(item => string.Equals(item.Nome, nomeDoArquivo, StringComparison.OrdinalIgnoreCase));
+
+                        if (jaExiste)
                         {
-                            algumCheckboxMarcado = true;
-                            break;
+                            RegistrarLogCopiarDados($"Item de servidor '{nomeDoArquivo}' já existe na lista. Ignorando.");
+                            continue;
                         }
+
+                        clbServidores.Items.Add(new ServidorItem { Nome = nomeDoArquivo, Tipo = "Aplicacao" });
+                        adicionados++;
+                    }
+
+                    if (adicionados > 0)
+                    {
+                        RegistrarLogCopiarDados($"{adicionados} aplicação(ões) servidora(s) adicionada(s) à lista de configuração.");
+                        configuracoesForamAlteradas = true;
+                        AtualizarEstadoBotoesConfig();
                     }
                 }
             }
-            // O botão Remover só é habilitado se estivermos em modo de edição E algum item estiver selecionado
-            btnRemoverGlobal.Enabled = emModoEdicaoGlobal && algumCheckboxMarcado;
+        }
 
-            // Força a saída do modo de edição se as listas ficarem vazias
-            if (!temItens && emModoEdicaoGlobal)
+        private void btnAdicionarServico_Click(object sender, EventArgs e)
+        {
+            string nomeDoServico = Interaction.InputBox("Digite o nome exato do Serviço do Windows:", "Adicionar Serviço", "");
+            if (!string.IsNullOrWhiteSpace(nomeDoServico))
             {
-                btnEditarGlobal_Click(null, null);
+                bool jaExiste = clbServidores.Items.OfType<ServidorItem>().Any(item => string.Equals(item.Nome, nomeDoServico, StringComparison.OrdinalIgnoreCase));
+
+                if (jaExiste)
+                {
+                    MessageBox.Show($"O item '{nomeDoServico}' já existe na lista de servidores.", "Item Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                clbServidores.Items.Add(new ServidorItem { Nome = nomeDoServico, Tipo = "Servico" });
+                RegistrarLogCopiarDados($"Serviço '{nomeDoServico}' adicionado à lista de configuração.");
+                configuracoesForamAlteradas = true;
+                AtualizarEstadoBotoesConfig();
+            }
+        }
+
+        private void btnAdicionarCliente_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialogo = new OpenFileDialog())
+            {
+                dialogo.Title = "Selecione a(s) Aplicação(ões) Cliente";
+                dialogo.Filter = "Aplicações (*.exe)|*.exe";
+                dialogo.Multiselect = true;
+
+                if (dialogo.ShowDialog() == DialogResult.OK)
+                {
+                    int adicionados = 0;
+                    foreach (string caminhoCompleto in dialogo.FileNames)
+                    {
+                        string nomeDoArquivo = Path.GetFileName(caminhoCompleto);
+                        bool jaExiste = clbClientes.Items.OfType<ClienteItem>().Any(item => string.Equals(item.Nome, nomeDoArquivo, StringComparison.OrdinalIgnoreCase));
+
+                        if (jaExiste)
+                        {
+                            RegistrarLogCopiarDados($"Aplicação '{nomeDoArquivo}' já existe na lista. Ignorando.");
+                            continue;
+                        }
+
+                        clbClientes.Items.Add(new ClienteItem { Nome = nomeDoArquivo, Categoria = "Categoria Padrão" });
+                        adicionados++;
+                    }
+
+                    if (adicionados > 0)
+                    {
+                        RegistrarLogCopiarDados($"{adicionados} aplicação(ões) cliente adicionada(s) à lista de configuração.");
+                        configuracoesForamAlteradas = true;
+                        AtualizarEstadoBotoesConfig();
+                    }
+                }
             }
         }
 
@@ -1887,15 +1841,6 @@ namespace CopiarExes {
             // Lista para guardar as linhas que serão removidas
             List<DataGridViewRow> linhasParaRemover = new List<DataGridViewRow>();
 
-            // Percorre todas as linhas da tabela
-            foreach (DataGridViewRow row in dgvConfigClientes.Rows)
-            {
-                // Verifica se a célula do checkbox não é nula e se está marcada
-                if (row.Cells["colunaCheckbox"] != null && Convert.ToBoolean(row.Cells["colunaCheckbox"].Value))
-                {
-                    linhasParaRemover.Add(row);
-                }
-            }
 
             // Se o usuário selecionou alguma linha para remover
             if (linhasParaRemover.Count > 0)
@@ -1906,11 +1851,6 @@ namespace CopiarExes {
                                       MessageBoxButtons.YesNo,
                                       MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    // Remove as linhas selecionadas da tabela
-                    foreach (DataGridViewRow row in linhasParaRemover)
-                    {
-                        dgvConfigClientes.Rows.Remove(row);
-                    }
                     configuracoesForamAlteradas = true;
                     RegistrarLogCopiarDados($"{linhasParaRemover.Count} cliente(s) removidos da lista de configuração.");
                 }
@@ -1918,123 +1858,6 @@ namespace CopiarExes {
             else
             {
                 MessageBox.Show("Nenhum item foi selecionado para remoção.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            // Após remover, atualiza o estado dos botões
-            AtualizarEstadoBotoesConfig();
-
-        }
-
-        private void btnAdicionarServico_Click(object sender, EventArgs e)
-        {
-            string nomeDoServico = Interaction.InputBox("Digite o nome exato do Serviço do Windows:", "Adicionar Serviço", "");
-
-            if (!string.IsNullOrWhiteSpace(nomeDoServico))
-            {
-                // --- VALIDAÇÃO DE DUPLICATAS PARA SERVIDORES ---
-                bool jaExiste = false;
-                foreach (DataGridViewRow row in dgvConfigServidores.Rows)
-                {
-                    if (row.Cells["Nome"].Value != null &&
-                        string.Equals(row.Cells["Nome"].Value.ToString(), nomeDoServico, StringComparison.OrdinalIgnoreCase))
-                    {
-                        jaExiste = true;
-                        break;
-                    }
-                }
-
-                if (jaExiste)
-                {
-                    MessageBox.Show($"O item '{nomeDoServico}' já existe na lista de servidores.",
-                                    "Item Duplicado",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Warning);
-                    return;
-                }
-                // --- FIM DA VALIDAÇÃO ---
-
-                dgvConfigServidores.Rows.Add(nomeDoServico, "Servico");
-
-                RegistrarLogCopiarDados($"Serviço '{nomeDoServico}' adicionado à lista de configuração.");
-
-                configuracoesForamAlteradas = true;
-
-                AtualizarEstadoBotoesConfig();
-            }
-        }
-
-        private void btnRemoverGlobal_Click(object sender, EventArgs e)
-        {
-            List<DataGridViewRow> linhasParaRemover = new List<DataGridViewRow>();
-
-            // Coleta itens marcados dos Clientes
-            foreach (DataGridViewRow row in dgvConfigClientes.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["colunaCheckbox"].Value))
-                {
-                    linhasParaRemover.Add(row);
-                }
-            }
-            // Coleta itens marcados dos Servidores
-            foreach (DataGridViewRow row in dgvConfigServidores.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["colunaCheckbox"].Value))
-                {
-                    linhasParaRemover.Add(row);
-                }
-            }
-
-            if (linhasParaRemover.Count > 0)
-            {
-                if (MessageBox.Show($"Você tem certeza que deseja remover {linhasParaRemover.Count} item(ns) selecionado(s)?",
-                                      "Confirmar Remoção", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    foreach (var row in linhasParaRemover)
-                    {
-                        // Remove a linha da sua respectiva tabela
-                        (row.DataGridView).Rows.Remove(row);
-                    }
-                    RegistrarLogCopiarDados($"{linhasParaRemover.Count} item(ns) removido(s) da lista de configuração.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Nenhum item foi selecionado para remoção.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            AtualizarEstadoBotoesConfig();
-        }
-
-        private void btnEditarGlobal_Click(object sender, EventArgs e)
-        {
-            emModoEdicaoGlobal = !emModoEdicaoGlobal;
-
-            if (emModoEdicaoGlobal)
-            {
-                // --- ENTRANDO NO MODO DE EDIÇÃO GLOBAL ---
-                // Adiciona checkbox na tabela de Clientes
-                DataGridViewCheckBoxColumn chkClientes = new DataGridViewCheckBoxColumn { Name = "colunaCheckbox", HeaderText = "Remover?", Width = 80 };
-                dgvConfigClientes.Columns.Insert(0, chkClientes);
-
-                // Adiciona checkbox na tabela de Servidores
-                DataGridViewCheckBoxColumn chkServidores = new DataGridViewCheckBoxColumn { Name = "colunaCheckbox", HeaderText = "Remover?", Width = 80 };
-                dgvConfigServidores.Columns.Insert(0, chkServidores);
-
-                btnEditarGlobal.Text = "Concluir Edição";
-                btnRemoverGlobal.Enabled = true;
-            }
-            else
-            {
-                // --- SAINDO DO MODO DE EDIÇÃO GLOBAL ---
-                // Remove a coluna de ambas as tabelas (se existirem)
-                if (dgvConfigClientes.Columns.Contains("colunaCheckbox"))
-                    dgvConfigClientes.Columns.Remove("colunaCheckbox");
-
-                if (dgvConfigServidores.Columns.Contains("colunaCheckbox"))
-                    dgvConfigServidores.Columns.Remove("colunaCheckbox");
-
-                btnEditarGlobal.Text = "Editar Itens...";
-                btnRemoverGlobal.Enabled = false;
             }
         }
 
@@ -2046,48 +1869,41 @@ namespace CopiarExes {
 
         }
 
-        private void dgvConfigClientes_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            // Se a coluna alterada for a de checkbox, atualize os botões
-            if (e.ColumnIndex == 0 && emModoEdicaoGlobal)
-            {
-                AtualizarEstadoBotoesConfig();
-            }
-        }
 
         private void tabCopiarExes_Deselecting(object sender, TabControlCancelEventArgs e)
         {
-            // Esta lógica só roda se o usuário ESTAVA na aba de configurações E existem alterações pendentes
             if (e.TabPage == tabConfiguracoes && configuracoesForamAlteradas)
             {
-                DialogResult resultado;
-                using (frmConfirmarSalvar formConfirmacao = new frmConfirmarSalvar())
-                {
-                    resultado = formConfirmacao.ShowDialog();
-                }
+                // VOLTAMOS A USAR O MESSAGEBOX PADRÃO
+                DialogResult resultado = MessageBox.Show(
+                    "Você possui alterações não salvas. Deseja salvá-las antes de sair?",
+                    "Alterações Pendentes",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question
+                );
 
-                // --- A PARTE QUE FALTAVA VEM AQUI ---
-                // Avalia a escolha do usuário
+                // O switch continua funcionando perfeitamente
                 switch (resultado)
                 {
-                    // Caso 1: Usuário escolheu "Salvar e Sair"
-                    case DialogResult.Yes:
-                        btnSalvarConfiguracoes_Click(null, null); // Salva as alterações
-                                                                  // Deixa a troca de aba continuar
+                    case DialogResult.Yes: // Usuário clicou em "Sim" (Salvar)
+                        btnSalvarConfiguracoes_Click(null, null);
                         break;
 
-                    // Caso 2: Usuário escolheu "Sair sem Salvar"
-                    case DialogResult.No:
-                        CarregarDadosDeConfiguracao(); // Descarta as alterações
-                                                       // Deixa a troca de aba continuar
+                    case DialogResult.No: // Usuário clicou em "Não" (Não Salvar)
+                        CarregarDadosDeConfiguracao();
                         break;
 
-                    // Caso 3: Usuário escolheu "Permanecer na Aba"
-                    case DialogResult.Cancel:
-                        e.Cancel = true; // IMPEDE a troca de aba
+                    case DialogResult.Cancel: // Usuário clicou em "Cancelar"
+                        e.Cancel = true;
                         break;
                 }
             }
+        }
+
+        private void clb_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Usamos BeginInvoke para garantir que o estado do botão seja atualizado DEPOIS que o item for efetivamente marcado/desmarcado
+            this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate { AtualizarEstadoBotoesConfig(); });
         }
     }
 }
