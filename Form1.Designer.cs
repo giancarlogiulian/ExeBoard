@@ -107,8 +107,8 @@
             // 
             tabCopiarExes.Controls.Add(tabCopiarDados1);
             tabCopiarExes.Controls.Add(tabServidores);
-            tabCopiarExes.Controls.Add(tabSobre);
             tabCopiarExes.Controls.Add(tabConfiguracoes);
+            tabCopiarExes.Controls.Add(tabSobre);
             tabCopiarExes.Dock = DockStyle.Fill;
             tabCopiarExes.Location = new Point(0, 0);
             tabCopiarExes.Name = "tabCopiarExes";
@@ -466,10 +466,10 @@
             linkLabel1.AutoSize = true;
             linkLabel1.Location = new Point(114, 79);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(244, 15);
+            linkLabel1.Size = new Size(261, 15);
             linkLabel1.TabIndex = 6;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "https://github.com/nicochet01/CopiarExes\r\n";
+            linkLabel1.Text = "https://github.com/giancarlogiulian/ExeBoard\r\n";
             linkLabel1.Click += linkLabel1_Click;
             // 
             // label5
