@@ -1,6 +1,6 @@
-﻿namespace ExeBoard
+﻿namespace CopiarExes
 {
-    partial class frmExeBoard
+    partial class frmCopiarExes
     {
         /// <summary>
         ///  Required designer variable.
@@ -68,6 +68,18 @@
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
+            tabConfiguracoes = new TabPage();
+            btnCancelarAlteracoes = new Button();
+            btnRemoverGlobal = new Button();
+            btnEditarGlobal = new Button();
+            btnSalvarConfiguracoes = new Button();
+            gbConfigServidores = new GroupBox();
+            btnAdicionarExeServidor = new Button();
+            dgvConfigServidores = new DataGridView();
+            btnAdicionarServico = new Button();
+            gbConfigClientes = new GroupBox();
+            btnAdicionarCliente = new Button();
+            dgvConfigClientes = new DataGridView();
             icBandeja = new NotifyIcon(components);
             timerStatusServidores = new System.Windows.Forms.Timer(components);
             tabCopiarExes.SuspendLayout();
@@ -84,6 +96,11 @@
             tabSobre.SuspendLayout();
             gbSobre.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvColaboradores).BeginInit();
+            tabConfiguracoes.SuspendLayout();
+            gbConfigServidores.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvConfigServidores).BeginInit();
+            gbConfigClientes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvConfigClientes).BeginInit();
             SuspendLayout();
             // 
             // tabCopiarExes
@@ -91,6 +108,7 @@
             tabCopiarExes.Controls.Add(tabCopiarDados1);
             tabCopiarExes.Controls.Add(tabServidores);
             tabCopiarExes.Controls.Add(tabSobre);
+            tabCopiarExes.Controls.Add(tabConfiguracoes);
             tabCopiarExes.Dock = DockStyle.Fill;
             tabCopiarExes.Location = new Point(0, 0);
             tabCopiarExes.Name = "tabCopiarExes";
@@ -98,6 +116,7 @@
             tabCopiarExes.Size = new Size(800, 665);
             tabCopiarExes.TabIndex = 0;
             tabCopiarExes.SelectedIndexChanged += tabCopiarExes_SelectedIndexChanged;
+            tabCopiarExes.Deselecting += tabCopiarExes_Deselecting;
             // 
             // tabCopiarDados1
             // 
@@ -511,6 +530,140 @@
             label1.TabIndex = 0;
             label1.Text = "Copiar Exes v2.1";
             // 
+            // tabConfiguracoes
+            // 
+            tabConfiguracoes.Controls.Add(btnCancelarAlteracoes);
+            tabConfiguracoes.Controls.Add(btnRemoverGlobal);
+            tabConfiguracoes.Controls.Add(btnEditarGlobal);
+            tabConfiguracoes.Controls.Add(btnSalvarConfiguracoes);
+            tabConfiguracoes.Controls.Add(gbConfigServidores);
+            tabConfiguracoes.Controls.Add(gbConfigClientes);
+            tabConfiguracoes.Location = new Point(4, 24);
+            tabConfiguracoes.Name = "tabConfiguracoes";
+            tabConfiguracoes.Size = new Size(792, 637);
+            tabConfiguracoes.TabIndex = 3;
+            tabConfiguracoes.Text = "Configurações";
+            tabConfiguracoes.UseVisualStyleBackColor = true;
+            // 
+            // btnCancelarAlteracoes
+            // 
+            btnCancelarAlteracoes.Enabled = false;
+            btnCancelarAlteracoes.Location = new Point(526, 611);
+            btnCancelarAlteracoes.Name = "btnCancelarAlteracoes";
+            btnCancelarAlteracoes.Size = new Size(131, 23);
+            btnCancelarAlteracoes.TabIndex = 10;
+            btnCancelarAlteracoes.Text = "Cancelar Alterações";
+            btnCancelarAlteracoes.UseVisualStyleBackColor = true;
+            btnCancelarAlteracoes.Click += button2_Click_3;
+            // 
+            // btnRemoverGlobal
+            // 
+            btnRemoverGlobal.Location = new Point(378, 611);
+            btnRemoverGlobal.Name = "btnRemoverGlobal";
+            btnRemoverGlobal.Size = new Size(142, 23);
+            btnRemoverGlobal.TabIndex = 9;
+            btnRemoverGlobal.Text = "Remover Selecionados";
+            btnRemoverGlobal.UseVisualStyleBackColor = true;
+            btnRemoverGlobal.Click += btnRemoverGlobal_Click;
+            // 
+            // btnEditarGlobal
+            // 
+            btnEditarGlobal.Location = new Point(297, 611);
+            btnEditarGlobal.Name = "btnEditarGlobal";
+            btnEditarGlobal.Size = new Size(75, 23);
+            btnEditarGlobal.TabIndex = 8;
+            btnEditarGlobal.Text = "Editar Itens";
+            btnEditarGlobal.UseVisualStyleBackColor = true;
+            btnEditarGlobal.Click += btnEditarGlobal_Click;
+            // 
+            // btnSalvarConfiguracoes
+            // 
+            btnSalvarConfiguracoes.Enabled = false;
+            btnSalvarConfiguracoes.Location = new Point(663, 611);
+            btnSalvarConfiguracoes.Name = "btnSalvarConfiguracoes";
+            btnSalvarConfiguracoes.Size = new Size(121, 23);
+            btnSalvarConfiguracoes.TabIndex = 7;
+            btnSalvarConfiguracoes.Text = "Salvar Alterações";
+            btnSalvarConfiguracoes.UseVisualStyleBackColor = true;
+            btnSalvarConfiguracoes.Click += btnSalvarConfiguracoes_Click;
+            // 
+            // gbConfigServidores
+            // 
+            gbConfigServidores.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            gbConfigServidores.Controls.Add(btnAdicionarExeServidor);
+            gbConfigServidores.Controls.Add(dgvConfigServidores);
+            gbConfigServidores.Controls.Add(btnAdicionarServico);
+            gbConfigServidores.Location = new Point(405, 10);
+            gbConfigServidores.Name = "gbConfigServidores";
+            gbConfigServidores.Padding = new Padding(3, 3, 3, 40);
+            gbConfigServidores.Size = new Size(385, 600);
+            gbConfigServidores.TabIndex = 1;
+            gbConfigServidores.TabStop = false;
+            gbConfigServidores.Text = "Gerenciar Aplicações/Serviços Servidores";
+            // 
+            // btnAdicionarExeServidor
+            // 
+            btnAdicionarExeServidor.Location = new Point(121, 566);
+            btnAdicionarExeServidor.Name = "btnAdicionarExeServidor";
+            btnAdicionarExeServidor.Size = new Size(96, 23);
+            btnAdicionarExeServidor.TabIndex = 7;
+            btnAdicionarExeServidor.Text = "Adicionar Exe";
+            btnAdicionarExeServidor.UseVisualStyleBackColor = true;
+            btnAdicionarExeServidor.Click += btnAdicionarExeServidor_Click;
+            // 
+            // dgvConfigServidores
+            // 
+            dgvConfigServidores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvConfigServidores.Dock = DockStyle.Fill;
+            dgvConfigServidores.Location = new Point(3, 19);
+            dgvConfigServidores.Name = "dgvConfigServidores";
+            dgvConfigServidores.Size = new Size(379, 541);
+            dgvConfigServidores.TabIndex = 0;
+            dgvConfigServidores.CellValueChanged += dgvConfigClientes_CellValueChanged;
+            // 
+            // btnAdicionarServico
+            // 
+            btnAdicionarServico.Location = new Point(6, 566);
+            btnAdicionarServico.Name = "btnAdicionarServico";
+            btnAdicionarServico.Size = new Size(109, 23);
+            btnAdicionarServico.TabIndex = 4;
+            btnAdicionarServico.Text = "Adicionar Serviço";
+            btnAdicionarServico.UseVisualStyleBackColor = true;
+            btnAdicionarServico.Click += btnAdicionarServico_Click;
+            // 
+            // gbConfigClientes
+            // 
+            gbConfigClientes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            gbConfigClientes.Controls.Add(btnAdicionarCliente);
+            gbConfigClientes.Controls.Add(dgvConfigClientes);
+            gbConfigClientes.Location = new Point(10, 10);
+            gbConfigClientes.Name = "gbConfigClientes";
+            gbConfigClientes.Padding = new Padding(3, 3, 3, 40);
+            gbConfigClientes.Size = new Size(385, 600);
+            gbConfigClientes.TabIndex = 0;
+            gbConfigClientes.TabStop = false;
+            gbConfigClientes.Text = "Gerenciar Aplicações Clientes";
+            // 
+            // btnAdicionarCliente
+            // 
+            btnAdicionarCliente.Location = new Point(6, 566);
+            btnAdicionarCliente.Name = "btnAdicionarCliente";
+            btnAdicionarCliente.Size = new Size(96, 23);
+            btnAdicionarCliente.TabIndex = 1;
+            btnAdicionarCliente.Text = " Adicionar Exes";
+            btnAdicionarCliente.UseVisualStyleBackColor = true;
+            btnAdicionarCliente.Click += btnAdicionarCliente_Click;
+            // 
+            // dgvConfigClientes
+            // 
+            dgvConfigClientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvConfigClientes.Dock = DockStyle.Fill;
+            dgvConfigClientes.Location = new Point(3, 19);
+            dgvConfigClientes.Name = "dgvConfigClientes";
+            dgvConfigClientes.Size = new Size(379, 541);
+            dgvConfigClientes.TabIndex = 0;
+            dgvConfigClientes.CellValueChanged += dgvConfigClientes_CellValueChanged;
+            // 
             // icBandeja
             // 
             icBandeja.Text = "CopiarExes";
@@ -522,15 +675,15 @@
             timerStatusServidores.Interval = 1000;
             timerStatusServidores.Tick += timerStatusServidores_Tick;
             // 
-            // frmExeBoard
+            // frmCopiarExes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 665);
             Controls.Add(tabCopiarExes);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Name = "frmExeBoard";
-            Text = "Copiar Exes v2.1 [2025]";
+            Name = "frmCopiarExes";
+            Text = "ExeBoard v2.1 [2025]";
             FormClosing += frmCopiarExes_FormClosing;
             Load += frmCopiarExes_Load;
             tabCopiarExes.ResumeLayout(false);
@@ -551,6 +704,11 @@
             gbSobre.ResumeLayout(false);
             gbSobre.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvColaboradores).EndInit();
+            tabConfiguracoes.ResumeLayout(false);
+            gbConfigServidores.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvConfigServidores).EndInit();
+            gbConfigClientes.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvConfigClientes).EndInit();
             ResumeLayout(false);
         }
 
@@ -597,5 +755,17 @@
         private GroupBox groupboxServidores;
         private Button btnReiniciar;
         private System.Windows.Forms.Timer timerStatusServidores;
+        private TabPage tabConfiguracoes;
+        private GroupBox gbConfigClientes;
+        private GroupBox gbConfigServidores;
+        private DataGridView dgvConfigClientes;
+        private Button btnAdicionarCliente;
+        private DataGridView dgvConfigServidores;
+        private Button btnAdicionarServico;
+        private Button btnSalvarConfiguracoes;
+        private Button btnAdicionarExeServidor;
+        private Button btnRemoverGlobal;
+        private Button btnEditarGlobal;
+        private Button btnCancelarAlteracoes;
     }
 }

@@ -1,5 +1,5 @@
-# ExeBoard
-### Programa desenvolvido para automatizar o download, instalação, inicialização de aplicações com arquitetura cliente-servidor e atualização de bancos de dados
+# CopiarExes
+### Programa desenvolvido para automatizar o download, instalação, inicialização de sistemas com arquitetura cliente-servidor e atualização de bancos de dados
 
 #### Passo a Passo (Para Usuários e Desenvolvedores)
 1. Instalar o NET Framework ( https://dotnet.microsoft.com/pt-br/download )
@@ -44,10 +44,8 @@ Categoria3=
 Count=2                     -- Quantidade de aplicações servidoras
 Servidor0=Servidor1.exe     -- Nome da aplicação servidora
 SubDiretorios0=             -- Utilizar caso houver outros diretórios depois da Server para apontar ao EXE
-NomeServico0=Servidor       -- Nome do serviço no Windows caso rode como um serviço
 Tipo1=Servico               -- Servico (caso seja executado como um serviço do Windows) ou Aplicacao
 Servidor1=Servidor2.exe
-NomeServico1=Servidor2
 SubDiretorios1=
 Tipo1=Aplicação
 

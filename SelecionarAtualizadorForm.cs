@@ -7,13 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ExeBoard.frmExeBoard;
+using static CopiarExes.frmCopiarExes;
 
-namespace ExeBoard
+namespace CopiarExes
 {
     public partial class frmAtualizador : Form
     {
         public Atualizador atualizadorSelecionado { get; private set; }
+
+        public frmAtualizador()
+        {
+            InitializeComponent();
+        }
 
         public frmAtualizador(List<Atualizador> atualizadores)
         {
