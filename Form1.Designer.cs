@@ -1,4 +1,4 @@
-﻿namespace CopiarExes
+﻿namespace ExeBoard
 {
     partial class frmCopiarExes
     {
@@ -62,10 +62,11 @@
             tabConfiguracoes = new TabPage();
             btnCancelarAlteracoes = new Button();
             btnRemoverGlobal = new Button();
-            btnEditarGlobal = new Button();
             btnSalvarConfiguracoes = new Button();
             gbConfigServidores = new GroupBox();
             clbServidores = new CheckedListBox();
+            cmsMarcarDesmarcar = new ContextMenuStrip(components);
+            tsmMarcarDesmarcarTodos = new ToolStripMenuItem();
             btnAdicionarExeServidor = new Button();
             btnAdicionarServico = new Button();
             gbConfigClientes = new GroupBox();
@@ -95,6 +96,7 @@
             groupBox2.SuspendLayout();
             tabConfiguracoes.SuspendLayout();
             gbConfigServidores.SuspendLayout();
+            cmsMarcarDesmarcar.SuspendLayout();
             gbConfigClientes.SuspendLayout();
             tabSobre.SuspendLayout();
             gbSobre.SuspendLayout();
@@ -436,7 +438,6 @@
             // 
             tabConfiguracoes.Controls.Add(btnCancelarAlteracoes);
             tabConfiguracoes.Controls.Add(btnRemoverGlobal);
-            tabConfiguracoes.Controls.Add(btnEditarGlobal);
             tabConfiguracoes.Controls.Add(btnSalvarConfiguracoes);
             tabConfiguracoes.Controls.Add(gbConfigServidores);
             tabConfiguracoes.Controls.Add(gbConfigClientes);
@@ -468,16 +469,6 @@
             btnRemoverGlobal.UseVisualStyleBackColor = true;
             btnRemoverGlobal.Click += btnRemoverGlobal_Click;
             // 
-            // btnEditarGlobal
-            // 
-            btnEditarGlobal.Location = new Point(297, 611);
-            btnEditarGlobal.Name = "btnEditarGlobal";
-            btnEditarGlobal.Size = new Size(75, 23);
-            btnEditarGlobal.TabIndex = 8;
-            btnEditarGlobal.Text = "Editar Itens";
-            btnEditarGlobal.UseVisualStyleBackColor = true;
-            btnEditarGlobal.Click += btnEditarGlobal_Click;
-            // 
             // btnSalvarConfiguracoes
             // 
             btnSalvarConfiguracoes.Enabled = false;
@@ -506,6 +497,7 @@
             // clbServidores
             // 
             clbServidores.CheckOnClick = true;
+            clbServidores.ContextMenuStrip = cmsMarcarDesmarcar;
             clbServidores.Dock = DockStyle.Fill;
             clbServidores.FormattingEnabled = true;
             clbServidores.Location = new Point(3, 19);
@@ -513,6 +505,19 @@
             clbServidores.Size = new Size(379, 541);
             clbServidores.TabIndex = 8;
             clbServidores.ItemCheck += clb_ItemCheck;
+            // 
+            // cmsMarcarDesmarcar
+            // 
+            cmsMarcarDesmarcar.Items.AddRange(new ToolStripItem[] { tsmMarcarDesmarcarTodos });
+            cmsMarcarDesmarcar.Name = "cmsMarcarDesmarcar";
+            cmsMarcarDesmarcar.Size = new Size(207, 26);
+            // 
+            // tsmMarcarDesmarcarTodos
+            // 
+            tsmMarcarDesmarcarTodos.Name = "tsmMarcarDesmarcarTodos";
+            tsmMarcarDesmarcarTodos.Size = new Size(206, 22);
+            tsmMarcarDesmarcarTodos.Text = "Marcar/Desmarcar Todos";
+            tsmMarcarDesmarcarTodos.Click += tsmMarcarDesmarcarTodos_Click;
             // 
             // btnAdicionarExeServidor
             // 
@@ -550,12 +555,13 @@
             // clbClientes
             // 
             clbClientes.CheckOnClick = true;
+            clbClientes.ContextMenuStrip = cmsMarcarDesmarcar;
             clbClientes.Dock = DockStyle.Fill;
             clbClientes.FormattingEnabled = true;
             clbClientes.Location = new Point(3, 19);
             clbClientes.Name = "clbClientes";
             clbClientes.Size = new Size(379, 541);
-            clbClientes.TabIndex = 2;
+            clbClientes.TabIndex = 1;
             clbClientes.ItemCheck += clb_ItemCheck;
             // 
             // btnAdicionarCliente
@@ -682,6 +688,8 @@
             ClientSize = new Size(800, 665);
             Controls.Add(tabCopiarExes);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "frmCopiarExes";
             Text = "ExeBoard v2.1 [2025]";
             FormClosing += frmCopiarExes_FormClosing;
@@ -702,6 +710,7 @@
             groupBox2.ResumeLayout(false);
             tabConfiguracoes.ResumeLayout(false);
             gbConfigServidores.ResumeLayout(false);
+            cmsMarcarDesmarcar.ResumeLayout(false);
             gbConfigClientes.ResumeLayout(false);
             tabSobre.ResumeLayout(false);
             gbSobre.ResumeLayout(false);
@@ -761,9 +770,10 @@
         private Button btnSalvarConfiguracoes;
         private Button btnAdicionarExeServidor;
         private Button btnRemoverGlobal;
-        private Button btnEditarGlobal;
         private Button btnCancelarAlteracoes;
         private CheckedListBox clbServidores;
         private CheckedListBox clbClientes;
+        private ContextMenuStrip cmsMarcarDesmarcar;
+        private ToolStripMenuItem tsmMarcarDesmarcarTodos;
     }
 }

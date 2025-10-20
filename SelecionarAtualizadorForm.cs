@@ -7,9 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static CopiarExes.frmCopiarExes;
 
-namespace CopiarExes
+namespace ExeBoard
 {
     public partial class frmAtualizador : Form
     {
