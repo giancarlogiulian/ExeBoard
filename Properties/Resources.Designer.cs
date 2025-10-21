@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CopiarExes.Properties {
+namespace ExeBoard.Properties {
     using System;
     
     

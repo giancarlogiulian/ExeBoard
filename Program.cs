@@ -1,4 +1,4 @@
-namespace CopiarExes
+namespace ExeBoard
 {
     internal static class Program
     {
