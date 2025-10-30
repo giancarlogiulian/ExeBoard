@@ -35,18 +35,21 @@
             btnLimparLog = new Button();
             lbLog = new ListBox();
             gbServidores = new GroupBox();
+            btnProcurarServidores = new Button();
+            txtDestinoServidores = new TextBox();
             cbGroupServidores = new CheckedListBox();
             gbClientes = new GroupBox();
+            btnProcurarClientes = new Button();
+            txtDestinoClientes = new TextBox();
             cbGroupClientes = new CheckedListBox();
             gbAtualizadores = new GroupBox();
+            btnProcurarAtualizadores = new Button();
+            txtDestinoAtualizadores = new TextBox();
             cbGroupAtualizadores = new CheckedListBox();
             groupBox1 = new GroupBox();
             button1 = new Button();
             btnCriarConexao = new Button();
             btnCopiarDados = new Button();
-            gbPastaDeDestino = new GroupBox();
-            btnProcurarPastaDestino = new Button();
-            edtPastaDestino = new TextBox();
             gbBranch = new GroupBox();
             btnBuscarCaminhoBranch = new Button();
             edtCaminhoBranch = new TextBox();
@@ -83,6 +86,9 @@
             label1 = new Label();
             icBandeja = new NotifyIcon(components);
             timerStatusServidores = new System.Windows.Forms.Timer(components);
+            gbConfigAtualizadores = new GroupBox();
+            clbAtualizadores = new CheckedListBox();
+            btnAdicionarAtualizador = new Button();
             tabCopiarExes.SuspendLayout();
             tabCopiarDados1.SuspendLayout();
             gbLog.SuspendLayout();
@@ -90,7 +96,6 @@
             gbClientes.SuspendLayout();
             gbAtualizadores.SuspendLayout();
             groupBox1.SuspendLayout();
-            gbPastaDeDestino.SuspendLayout();
             gbBranch.SuspendLayout();
             tabServidores.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -101,6 +106,7 @@
             tabSobre.SuspendLayout();
             gbSobre.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvColaboradores).BeginInit();
+            gbConfigAtualizadores.SuspendLayout();
             SuspendLayout();
             // 
             // tabCopiarExes
@@ -125,7 +131,6 @@
             tabCopiarDados1.Controls.Add(gbClientes);
             tabCopiarDados1.Controls.Add(gbAtualizadores);
             tabCopiarDados1.Controls.Add(groupBox1);
-            tabCopiarDados1.Controls.Add(gbPastaDeDestino);
             tabCopiarDados1.Controls.Add(gbBranch);
             tabCopiarDados1.Location = new Point(4, 24);
             tabCopiarDados1.Name = "tabCopiarDados1";
@@ -168,61 +173,127 @@
             // 
             // gbServidores
             // 
+            gbServidores.Controls.Add(btnProcurarServidores);
+            gbServidores.Controls.Add(txtDestinoServidores);
             gbServidores.Controls.Add(cbGroupServidores);
             gbServidores.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gbServidores.Location = new Point(528, 205);
+            gbServidores.Location = new Point(528, 140);
             gbServidores.Name = "gbServidores";
-            gbServidores.Size = new Size(255, 273);
+            gbServidores.Size = new Size(255, 338);
             gbServidores.TabIndex = 5;
             gbServidores.TabStop = false;
             gbServidores.Text = "Servidores";
             // 
+            // btnProcurarServidores
+            // 
+            btnProcurarServidores.Location = new Point(226, 22);
+            btnProcurarServidores.Name = "btnProcurarServidores";
+            btnProcurarServidores.Size = new Size(23, 23);
+            btnProcurarServidores.TabIndex = 4;
+            btnProcurarServidores.UseVisualStyleBackColor = true;
+            btnProcurarServidores.Click += btnProcurarServidores_Click;
+            // 
+            // txtDestinoServidores
+            // 
+            txtDestinoServidores.ForeColor = SystemColors.GrayText;
+            txtDestinoServidores.Location = new Point(6, 22);
+            txtDestinoServidores.Name = "txtDestinoServidores";
+            txtDestinoServidores.Size = new Size(212, 23);
+            txtDestinoServidores.TabIndex = 4;
+            txtDestinoServidores.Text = "Informe o caminho da pasta aqui";
+            txtDestinoServidores.Enter += Placeholder_Enter;
+            txtDestinoServidores.Leave += Placeholder_Leave;
+            // 
             // cbGroupServidores
             // 
             cbGroupServidores.FormattingEnabled = true;
-            cbGroupServidores.Location = new Point(6, 22);
+            cbGroupServidores.Location = new Point(6, 58);
             cbGroupServidores.Name = "cbGroupServidores";
-            cbGroupServidores.Size = new Size(243, 238);
+            cbGroupServidores.Size = new Size(243, 274);
             cbGroupServidores.TabIndex = 0;
             cbGroupServidores.MouseDown += cbGroupServidores_MouseDown;
             // 
             // gbClientes
             // 
+            gbClientes.Controls.Add(btnProcurarClientes);
+            gbClientes.Controls.Add(txtDestinoClientes);
             gbClientes.Controls.Add(cbGroupClientes);
             gbClientes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gbClientes.Location = new Point(267, 205);
+            gbClientes.Location = new Point(267, 140);
             gbClientes.Name = "gbClientes";
-            gbClientes.Size = new Size(255, 273);
+            gbClientes.Size = new Size(255, 338);
             gbClientes.TabIndex = 4;
             gbClientes.TabStop = false;
             gbClientes.Text = "Clientes";
             // 
+            // btnProcurarClientes
+            // 
+            btnProcurarClientes.Location = new Point(226, 22);
+            btnProcurarClientes.Name = "btnProcurarClientes";
+            btnProcurarClientes.Size = new Size(23, 23);
+            btnProcurarClientes.TabIndex = 3;
+            btnProcurarClientes.UseVisualStyleBackColor = true;
+            btnProcurarClientes.Click += btnProcurarClientes_Click;
+            // 
+            // txtDestinoClientes
+            // 
+            txtDestinoClientes.ForeColor = SystemColors.GrayText;
+            txtDestinoClientes.Location = new Point(6, 22);
+            txtDestinoClientes.Name = "txtDestinoClientes";
+            txtDestinoClientes.Size = new Size(212, 23);
+            txtDestinoClientes.TabIndex = 3;
+            txtDestinoClientes.Text = "Informe o caminho da pasta aqui";
+            txtDestinoClientes.Enter += Placeholder_Enter;
+            txtDestinoClientes.Leave += Placeholder_Leave;
+            // 
             // cbGroupClientes
             // 
             cbGroupClientes.FormattingEnabled = true;
-            cbGroupClientes.Location = new Point(6, 22);
+            cbGroupClientes.Location = new Point(6, 58);
             cbGroupClientes.Name = "cbGroupClientes";
-            cbGroupClientes.Size = new Size(243, 238);
+            cbGroupClientes.Size = new Size(243, 274);
             cbGroupClientes.TabIndex = 0;
             cbGroupClientes.MouseDown += cbGroupClientes_MouseDown;
             // 
             // gbAtualizadores
             // 
+            gbAtualizadores.Controls.Add(btnProcurarAtualizadores);
+            gbAtualizadores.Controls.Add(txtDestinoAtualizadores);
             gbAtualizadores.Controls.Add(cbGroupAtualizadores);
             gbAtualizadores.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gbAtualizadores.Location = new Point(6, 205);
+            gbAtualizadores.Location = new Point(6, 140);
             gbAtualizadores.Name = "gbAtualizadores";
-            gbAtualizadores.Size = new Size(255, 273);
+            gbAtualizadores.Size = new Size(255, 338);
             gbAtualizadores.TabIndex = 3;
             gbAtualizadores.TabStop = false;
             gbAtualizadores.Text = "Atualizadores";
             // 
+            // btnProcurarAtualizadores
+            // 
+            btnProcurarAtualizadores.Location = new Point(224, 22);
+            btnProcurarAtualizadores.Name = "btnProcurarAtualizadores";
+            btnProcurarAtualizadores.Size = new Size(23, 23);
+            btnProcurarAtualizadores.TabIndex = 2;
+            btnProcurarAtualizadores.UseVisualStyleBackColor = true;
+            btnProcurarAtualizadores.Click += btnProcurarAtualizadores_Click;
+            // 
+            // txtDestinoAtualizadores
+            // 
+            txtDestinoAtualizadores.ForeColor = SystemColors.GrayText;
+            txtDestinoAtualizadores.Location = new Point(6, 22);
+            txtDestinoAtualizadores.Name = "txtDestinoAtualizadores";
+            txtDestinoAtualizadores.Size = new Size(212, 23);
+            txtDestinoAtualizadores.TabIndex = 1;
+            txtDestinoAtualizadores.Text = "Informe o caminho da pasta aqui";
+            txtDestinoAtualizadores.Enter += Placeholder_Enter;
+            txtDestinoAtualizadores.Leave += Placeholder_Leave;
+            // 
             // cbGroupAtualizadores
             // 
             cbGroupAtualizadores.FormattingEnabled = true;
-            cbGroupAtualizadores.Location = new Point(6, 22);
+            cbGroupAtualizadores.Location = new Point(6, 58);
             cbGroupAtualizadores.Name = "cbGroupAtualizadores";
-            cbGroupAtualizadores.Size = new Size(243, 238);
+            cbGroupAtualizadores.Size = new Size(243, 274);
             cbGroupAtualizadores.TabIndex = 0;
             cbGroupAtualizadores.MouseDown += cbGroupAtualizadores_MouseDown;
             // 
@@ -232,7 +303,7 @@
             groupBox1.Controls.Add(btnCriarConexao);
             groupBox1.Controls.Add(btnCopiarDados);
             groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            groupBox1.Location = new Point(6, 136);
+            groupBox1.Location = new Point(6, 71);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(777, 63);
             groupBox1.TabIndex = 2;
@@ -268,35 +339,6 @@
             btnCopiarDados.Text = "Copiar Dados";
             btnCopiarDados.UseVisualStyleBackColor = true;
             btnCopiarDados.Click += btnCopiarDados_Click;
-            // 
-            // gbPastaDeDestino
-            // 
-            gbPastaDeDestino.Controls.Add(btnProcurarPastaDestino);
-            gbPastaDeDestino.Controls.Add(edtPastaDestino);
-            gbPastaDeDestino.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            gbPastaDeDestino.Location = new Point(6, 71);
-            gbPastaDeDestino.Name = "gbPastaDeDestino";
-            gbPastaDeDestino.Size = new Size(777, 59);
-            gbPastaDeDestino.TabIndex = 1;
-            gbPastaDeDestino.TabStop = false;
-            gbPastaDeDestino.Text = "Pasta de Destino";
-            // 
-            // btnProcurarPastaDestino
-            // 
-            btnProcurarPastaDestino.Location = new Point(675, 22);
-            btnProcurarPastaDestino.Name = "btnProcurarPastaDestino";
-            btnProcurarPastaDestino.Size = new Size(75, 23);
-            btnProcurarPastaDestino.TabIndex = 1;
-            btnProcurarPastaDestino.Text = "Procurar";
-            btnProcurarPastaDestino.UseVisualStyleBackColor = true;
-            btnProcurarPastaDestino.Click += btnProcurarPastaDestino_Click;
-            // 
-            // edtPastaDestino
-            // 
-            edtPastaDestino.Location = new Point(6, 22);
-            edtPastaDestino.Name = "edtPastaDestino";
-            edtPastaDestino.Size = new Size(663, 23);
-            edtPastaDestino.TabIndex = 0;
             // 
             // gbBranch
             // 
@@ -436,6 +478,7 @@
             // 
             // tabConfiguracoes
             // 
+            tabConfiguracoes.Controls.Add(gbConfigAtualizadores);
             tabConfiguracoes.Controls.Add(btnCancelarAlteracoes);
             tabConfiguracoes.Controls.Add(btnRemoverGlobal);
             tabConfiguracoes.Controls.Add(btnSalvarConfiguracoes);
@@ -486,10 +529,10 @@
             gbConfigServidores.Controls.Add(clbServidores);
             gbConfigServidores.Controls.Add(btnAdicionarExeServidor);
             gbConfigServidores.Controls.Add(btnAdicionarServico);
-            gbConfigServidores.Location = new Point(405, 10);
+            gbConfigServidores.Location = new Point(529, 10);
             gbConfigServidores.Name = "gbConfigServidores";
             gbConfigServidores.Padding = new Padding(3, 3, 3, 40);
-            gbConfigServidores.Size = new Size(385, 600);
+            gbConfigServidores.Size = new Size(255, 600);
             gbConfigServidores.TabIndex = 1;
             gbConfigServidores.TabStop = false;
             gbConfigServidores.Text = "Gerenciar Aplicações/Serviços Servidores";
@@ -502,7 +545,7 @@
             clbServidores.FormattingEnabled = true;
             clbServidores.Location = new Point(3, 19);
             clbServidores.Name = "clbServidores";
-            clbServidores.Size = new Size(379, 541);
+            clbServidores.Size = new Size(249, 541);
             clbServidores.TabIndex = 8;
             clbServidores.ItemCheck += clb_ItemCheck;
             // 
@@ -544,10 +587,10 @@
             gbConfigClientes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             gbConfigClientes.Controls.Add(clbClientes);
             gbConfigClientes.Controls.Add(btnAdicionarCliente);
-            gbConfigClientes.Location = new Point(10, 10);
+            gbConfigClientes.Location = new Point(268, 10);
             gbConfigClientes.Name = "gbConfigClientes";
             gbConfigClientes.Padding = new Padding(3, 3, 3, 40);
-            gbConfigClientes.Size = new Size(385, 600);
+            gbConfigClientes.Size = new Size(255, 600);
             gbConfigClientes.TabIndex = 0;
             gbConfigClientes.TabStop = false;
             gbConfigClientes.Text = "Gerenciar Aplicações Clientes";
@@ -560,7 +603,7 @@
             clbClientes.FormattingEnabled = true;
             clbClientes.Location = new Point(3, 19);
             clbClientes.Name = "clbClientes";
-            clbClientes.Size = new Size(379, 541);
+            clbClientes.Size = new Size(249, 541);
             clbClientes.TabIndex = 1;
             clbClientes.ItemCheck += clb_ItemCheck;
             // 
@@ -681,6 +724,39 @@
             timerStatusServidores.Interval = 1000;
             timerStatusServidores.Tick += timerStatusServidores_Tick;
             // 
+            // gbConfigAtualizadores
+            // 
+            gbConfigAtualizadores.Controls.Add(btnAdicionarAtualizador);
+            gbConfigAtualizadores.Controls.Add(clbAtualizadores);
+            gbConfigAtualizadores.Location = new Point(8, 10);
+            gbConfigAtualizadores.Name = "gbConfigAtualizadores";
+            gbConfigAtualizadores.Size = new Size(255, 600);
+            gbConfigAtualizadores.TabIndex = 2;
+            gbConfigAtualizadores.TabStop = false;
+            gbConfigAtualizadores.Text = "Gerenciar Atualizadores/Bancos";
+            // 
+            // clbAtualizadores
+            // 
+            clbAtualizadores.CheckOnClick = true;
+            clbAtualizadores.ContextMenuStrip = cmsMarcarDesmarcar;
+            clbAtualizadores.Dock = DockStyle.Top;
+            clbAtualizadores.FormattingEnabled = true;
+            clbAtualizadores.Location = new Point(3, 19);
+            clbAtualizadores.Name = "clbAtualizadores";
+            clbAtualizadores.Size = new Size(249, 526);
+            clbAtualizadores.TabIndex = 0;
+            clbAtualizadores.ItemCheck += clb_ItemCheck;
+            // 
+            // btnAdicionarAtualizador
+            // 
+            btnAdicionarAtualizador.Location = new Point(6, 566);
+            btnAdicionarAtualizador.Name = "btnAdicionarAtualizador";
+            btnAdicionarAtualizador.Size = new Size(129, 23);
+            btnAdicionarAtualizador.TabIndex = 1;
+            btnAdicionarAtualizador.Text = "Adicionar Atualizador";
+            btnAdicionarAtualizador.UseVisualStyleBackColor = true;
+            btnAdicionarAtualizador.Click += btnAdicionarAtualizador_Click;
+            // 
             // frmCopiarExes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -698,11 +774,12 @@
             tabCopiarDados1.ResumeLayout(false);
             gbLog.ResumeLayout(false);
             gbServidores.ResumeLayout(false);
+            gbServidores.PerformLayout();
             gbClientes.ResumeLayout(false);
+            gbClientes.PerformLayout();
             gbAtualizadores.ResumeLayout(false);
+            gbAtualizadores.PerformLayout();
             groupBox1.ResumeLayout(false);
-            gbPastaDeDestino.ResumeLayout(false);
-            gbPastaDeDestino.PerformLayout();
             gbBranch.ResumeLayout(false);
             gbBranch.PerformLayout();
             tabServidores.ResumeLayout(false);
@@ -716,6 +793,7 @@
             gbSobre.ResumeLayout(false);
             gbSobre.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvColaboradores).EndInit();
+            gbConfigAtualizadores.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -728,9 +806,6 @@
         private GroupBox gbBranch;
         private Button btnBuscarCaminhoBranch;
         private TextBox edtCaminhoBranch;
-        private GroupBox gbPastaDeDestino;
-        private Button btnProcurarPastaDestino;
-        private TextBox edtPastaDestino;
         private GroupBox groupBox1;
         private Button btnCopiarDados;
         private Button btnCriarConexao;
@@ -775,5 +850,14 @@
         private CheckedListBox clbClientes;
         private ContextMenuStrip cmsMarcarDesmarcar;
         private ToolStripMenuItem tsmMarcarDesmarcarTodos;
+        private Button btnProcurarAtualizadores;
+        private TextBox txtDestinoAtualizadores;
+        private Button btnProcurarServidores;
+        private TextBox txtDestinoServidores;
+        private Button btnProcurarClientes;
+        private TextBox txtDestinoClientes;
+        private GroupBox gbConfigAtualizadores;
+        private CheckedListBox clbAtualizadores;
+        private Button btnAdicionarAtualizador;
     }
 }
