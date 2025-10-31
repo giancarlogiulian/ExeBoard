@@ -31,9 +31,12 @@
             components = new System.ComponentModel.Container();
             tabCopiarExes = new TabControl();
             tabCopiarDados1 = new TabPage();
+            btnMostrarTodos = new Button();
+            btnFiltrarSucesso = new Button();
+            btnFiltrarErros = new Button();
             gbLog = new GroupBox();
+            rtbLog = new RichTextBox();
             btnLimparLog = new Button();
-            lbLog = new ListBox();
             gbServidores = new GroupBox();
             btnProcurarServidores = new Button();
             txtDestinoServidores = new TextBox();
@@ -61,15 +64,18 @@
             cbSelecionarParados = new CheckBox();
             cbEmExecucao = new CheckBox();
             groupBox2 = new GroupBox();
-            lbLogServidores = new ListBox();
+            rtbLogServidores = new RichTextBox();
             tabConfiguracoes = new TabPage();
+            gbConfigAtualizadores = new GroupBox();
+            btnAdicionarAtualizador = new Button();
+            clbAtualizadores = new CheckedListBox();
+            cmsMarcarDesmarcar = new ContextMenuStrip(components);
+            tsmMarcarDesmarcarTodos = new ToolStripMenuItem();
             btnCancelarAlteracoes = new Button();
             btnRemoverGlobal = new Button();
             btnSalvarConfiguracoes = new Button();
             gbConfigServidores = new GroupBox();
             clbServidores = new CheckedListBox();
-            cmsMarcarDesmarcar = new ContextMenuStrip(components);
-            tsmMarcarDesmarcarTodos = new ToolStripMenuItem();
             btnAdicionarExeServidor = new Button();
             btnAdicionarServico = new Button();
             gbConfigClientes = new GroupBox();
@@ -86,9 +92,6 @@
             label1 = new Label();
             icBandeja = new NotifyIcon(components);
             timerStatusServidores = new System.Windows.Forms.Timer(components);
-            gbConfigAtualizadores = new GroupBox();
-            clbAtualizadores = new CheckedListBox();
-            btnAdicionarAtualizador = new Button();
             tabCopiarExes.SuspendLayout();
             tabCopiarDados1.SuspendLayout();
             gbLog.SuspendLayout();
@@ -100,13 +103,13 @@
             tabServidores.SuspendLayout();
             groupBox2.SuspendLayout();
             tabConfiguracoes.SuspendLayout();
-            gbConfigServidores.SuspendLayout();
+            gbConfigAtualizadores.SuspendLayout();
             cmsMarcarDesmarcar.SuspendLayout();
+            gbConfigServidores.SuspendLayout();
             gbConfigClientes.SuspendLayout();
             tabSobre.SuspendLayout();
             gbSobre.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvColaboradores).BeginInit();
-            gbConfigAtualizadores.SuspendLayout();
             SuspendLayout();
             // 
             // tabCopiarExes
@@ -126,7 +129,11 @@
             // 
             // tabCopiarDados1
             // 
+            tabCopiarDados1.Controls.Add(btnMostrarTodos);
+            tabCopiarDados1.Controls.Add(btnFiltrarSucesso);
+            tabCopiarDados1.Controls.Add(btnFiltrarErros);
             tabCopiarDados1.Controls.Add(gbLog);
+            tabCopiarDados1.Controls.Add(btnLimparLog);
             tabCopiarDados1.Controls.Add(gbServidores);
             tabCopiarDados1.Controls.Add(gbClientes);
             tabCopiarDados1.Controls.Add(gbAtualizadores);
@@ -140,36 +147,68 @@
             tabCopiarDados1.Text = "Copiar Dados";
             tabCopiarDados1.UseVisualStyleBackColor = true;
             // 
+            // btnMostrarTodos
+            // 
+            btnMostrarTodos.Location = new Point(702, 593);
+            btnMostrarTodos.Name = "btnMostrarTodos";
+            btnMostrarTodos.Size = new Size(75, 23);
+            btnMostrarTodos.TabIndex = 9;
+            btnMostrarTodos.Text = "Todos";
+            btnMostrarTodos.UseVisualStyleBackColor = true;
+            btnMostrarTodos.Click += btnMostrarTodos_Click;
+            // 
+            // btnFiltrarSucesso
+            // 
+            btnFiltrarSucesso.Location = new Point(702, 564);
+            btnFiltrarSucesso.Name = "btnFiltrarSucesso";
+            btnFiltrarSucesso.Size = new Size(75, 23);
+            btnFiltrarSucesso.TabIndex = 8;
+            btnFiltrarSucesso.Text = "Sucesso";
+            btnFiltrarSucesso.UseVisualStyleBackColor = true;
+            btnFiltrarSucesso.Click += btnFiltrarSucesso_Click;
+            // 
+            // btnFiltrarErros
+            // 
+            btnFiltrarErros.Location = new Point(702, 535);
+            btnFiltrarErros.Name = "btnFiltrarErros";
+            btnFiltrarErros.Size = new Size(75, 23);
+            btnFiltrarErros.TabIndex = 7;
+            btnFiltrarErros.Text = "Erros";
+            btnFiltrarErros.UseVisualStyleBackColor = true;
+            btnFiltrarErros.Click += btnFiltrarErros_Click;
+            // 
             // gbLog
             // 
-            gbLog.Controls.Add(btnLimparLog);
-            gbLog.Controls.Add(lbLog);
+            gbLog.Controls.Add(rtbLog);
             gbLog.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             gbLog.Location = new Point(6, 484);
             gbLog.Name = "gbLog";
-            gbLog.Size = new Size(777, 145);
+            gbLog.Size = new Size(669, 145);
             gbLog.TabIndex = 6;
             gbLog.TabStop = false;
             gbLog.Text = "Log de Atividades";
             // 
+            // rtbLog
+            // 
+            rtbLog.BackColor = Color.White;
+            rtbLog.Dock = DockStyle.Fill;
+            rtbLog.Location = new Point(3, 19);
+            rtbLog.Name = "rtbLog";
+            rtbLog.ReadOnly = true;
+            rtbLog.Size = new Size(663, 123);
+            rtbLog.TabIndex = 2;
+            rtbLog.Text = "";
+            rtbLog.WordWrap = false;
+            // 
             // btnLimparLog
             // 
-            btnLimparLog.Location = new Point(696, 22);
+            btnLimparLog.Location = new Point(702, 506);
             btnLimparLog.Name = "btnLimparLog";
             btnLimparLog.Size = new Size(75, 23);
             btnLimparLog.TabIndex = 1;
             btnLimparLog.Text = "Limpar Log";
             btnLimparLog.UseVisualStyleBackColor = true;
             btnLimparLog.Click += btnLimparLog_Click;
-            // 
-            // lbLog
-            // 
-            lbLog.FormattingEnabled = true;
-            lbLog.ItemHeight = 15;
-            lbLog.Location = new Point(6, 22);
-            lbLog.Name = "lbLog";
-            lbLog.Size = new Size(684, 109);
-            lbLog.TabIndex = 0;
             // 
             // gbServidores
             // 
@@ -206,6 +245,7 @@
             // 
             // cbGroupServidores
             // 
+            cbGroupServidores.CheckOnClick = true;
             cbGroupServidores.FormattingEnabled = true;
             cbGroupServidores.Location = new Point(6, 58);
             cbGroupServidores.Name = "cbGroupServidores";
@@ -248,6 +288,7 @@
             // 
             // cbGroupClientes
             // 
+            cbGroupClientes.CheckOnClick = true;
             cbGroupClientes.FormattingEnabled = true;
             cbGroupClientes.Location = new Point(6, 58);
             cbGroupClientes.Name = "cbGroupClientes";
@@ -290,6 +331,7 @@
             // 
             // cbGroupAtualizadores
             // 
+            cbGroupAtualizadores.CheckOnClick = true;
             cbGroupAtualizadores.FormattingEnabled = true;
             cbGroupAtualizadores.Location = new Point(6, 58);
             cbGroupAtualizadores.Name = "cbGroupAtualizadores";
@@ -458,7 +500,7 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(lbLogServidores);
+            groupBox2.Controls.Add(rtbLogServidores);
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox2.Location = new Point(6, 486);
             groupBox2.Name = "groupBox2";
@@ -467,14 +509,16 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Log de Atividades";
             // 
-            // lbLogServidores
+            // rtbLogServidores
             // 
-            lbLogServidores.FormattingEnabled = true;
-            lbLogServidores.ItemHeight = 15;
-            lbLogServidores.Location = new Point(6, 22);
-            lbLogServidores.Name = "lbLogServidores";
-            lbLogServidores.Size = new Size(765, 109);
-            lbLogServidores.TabIndex = 0;
+            rtbLogServidores.Dock = DockStyle.Fill;
+            rtbLogServidores.Location = new Point(3, 19);
+            rtbLogServidores.Name = "rtbLogServidores";
+            rtbLogServidores.ReadOnly = true;
+            rtbLogServidores.Size = new Size(771, 123);
+            rtbLogServidores.TabIndex = 0;
+            rtbLogServidores.Text = "";
+            rtbLogServidores.WordWrap = false;
             // 
             // tabConfiguracoes
             // 
@@ -490,6 +534,52 @@
             tabConfiguracoes.TabIndex = 3;
             tabConfiguracoes.Text = "Configurações";
             tabConfiguracoes.UseVisualStyleBackColor = true;
+            // 
+            // gbConfigAtualizadores
+            // 
+            gbConfigAtualizadores.Controls.Add(btnAdicionarAtualizador);
+            gbConfigAtualizadores.Controls.Add(clbAtualizadores);
+            gbConfigAtualizadores.Location = new Point(8, 10);
+            gbConfigAtualizadores.Name = "gbConfigAtualizadores";
+            gbConfigAtualizadores.Size = new Size(255, 600);
+            gbConfigAtualizadores.TabIndex = 2;
+            gbConfigAtualizadores.TabStop = false;
+            gbConfigAtualizadores.Text = "Gerenciar Atualizadores/Bancos";
+            // 
+            // btnAdicionarAtualizador
+            // 
+            btnAdicionarAtualizador.Location = new Point(6, 566);
+            btnAdicionarAtualizador.Name = "btnAdicionarAtualizador";
+            btnAdicionarAtualizador.Size = new Size(129, 23);
+            btnAdicionarAtualizador.TabIndex = 1;
+            btnAdicionarAtualizador.Text = "Adicionar Atualizador";
+            btnAdicionarAtualizador.UseVisualStyleBackColor = true;
+            btnAdicionarAtualizador.Click += btnAdicionarAtualizador_Click;
+            // 
+            // clbAtualizadores
+            // 
+            clbAtualizadores.CheckOnClick = true;
+            clbAtualizadores.ContextMenuStrip = cmsMarcarDesmarcar;
+            clbAtualizadores.Dock = DockStyle.Top;
+            clbAtualizadores.FormattingEnabled = true;
+            clbAtualizadores.Location = new Point(3, 19);
+            clbAtualizadores.Name = "clbAtualizadores";
+            clbAtualizadores.Size = new Size(249, 526);
+            clbAtualizadores.TabIndex = 0;
+            clbAtualizadores.ItemCheck += clb_ItemCheck;
+            // 
+            // cmsMarcarDesmarcar
+            // 
+            cmsMarcarDesmarcar.Items.AddRange(new ToolStripItem[] { tsmMarcarDesmarcarTodos });
+            cmsMarcarDesmarcar.Name = "cmsMarcarDesmarcar";
+            cmsMarcarDesmarcar.Size = new Size(207, 26);
+            // 
+            // tsmMarcarDesmarcarTodos
+            // 
+            tsmMarcarDesmarcarTodos.Name = "tsmMarcarDesmarcarTodos";
+            tsmMarcarDesmarcarTodos.Size = new Size(206, 22);
+            tsmMarcarDesmarcarTodos.Text = "Marcar/Desmarcar Todos";
+            tsmMarcarDesmarcarTodos.Click += tsmMarcarDesmarcarTodos_Click;
             // 
             // btnCancelarAlteracoes
             // 
@@ -548,19 +638,6 @@
             clbServidores.Size = new Size(249, 541);
             clbServidores.TabIndex = 8;
             clbServidores.ItemCheck += clb_ItemCheck;
-            // 
-            // cmsMarcarDesmarcar
-            // 
-            cmsMarcarDesmarcar.Items.AddRange(new ToolStripItem[] { tsmMarcarDesmarcarTodos });
-            cmsMarcarDesmarcar.Name = "cmsMarcarDesmarcar";
-            cmsMarcarDesmarcar.Size = new Size(207, 26);
-            // 
-            // tsmMarcarDesmarcarTodos
-            // 
-            tsmMarcarDesmarcarTodos.Name = "tsmMarcarDesmarcarTodos";
-            tsmMarcarDesmarcarTodos.Size = new Size(206, 22);
-            tsmMarcarDesmarcarTodos.Text = "Marcar/Desmarcar Todos";
-            tsmMarcarDesmarcarTodos.Click += tsmMarcarDesmarcarTodos_Click;
             // 
             // btnAdicionarExeServidor
             // 
@@ -724,39 +801,6 @@
             timerStatusServidores.Interval = 1000;
             timerStatusServidores.Tick += timerStatusServidores_Tick;
             // 
-            // gbConfigAtualizadores
-            // 
-            gbConfigAtualizadores.Controls.Add(btnAdicionarAtualizador);
-            gbConfigAtualizadores.Controls.Add(clbAtualizadores);
-            gbConfigAtualizadores.Location = new Point(8, 10);
-            gbConfigAtualizadores.Name = "gbConfigAtualizadores";
-            gbConfigAtualizadores.Size = new Size(255, 600);
-            gbConfigAtualizadores.TabIndex = 2;
-            gbConfigAtualizadores.TabStop = false;
-            gbConfigAtualizadores.Text = "Gerenciar Atualizadores/Bancos";
-            // 
-            // clbAtualizadores
-            // 
-            clbAtualizadores.CheckOnClick = true;
-            clbAtualizadores.ContextMenuStrip = cmsMarcarDesmarcar;
-            clbAtualizadores.Dock = DockStyle.Top;
-            clbAtualizadores.FormattingEnabled = true;
-            clbAtualizadores.Location = new Point(3, 19);
-            clbAtualizadores.Name = "clbAtualizadores";
-            clbAtualizadores.Size = new Size(249, 526);
-            clbAtualizadores.TabIndex = 0;
-            clbAtualizadores.ItemCheck += clb_ItemCheck;
-            // 
-            // btnAdicionarAtualizador
-            // 
-            btnAdicionarAtualizador.Location = new Point(6, 566);
-            btnAdicionarAtualizador.Name = "btnAdicionarAtualizador";
-            btnAdicionarAtualizador.Size = new Size(129, 23);
-            btnAdicionarAtualizador.TabIndex = 1;
-            btnAdicionarAtualizador.Text = "Adicionar Atualizador";
-            btnAdicionarAtualizador.UseVisualStyleBackColor = true;
-            btnAdicionarAtualizador.Click += btnAdicionarAtualizador_Click;
-            // 
             // frmCopiarExes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -786,14 +830,14 @@
             tabServidores.PerformLayout();
             groupBox2.ResumeLayout(false);
             tabConfiguracoes.ResumeLayout(false);
-            gbConfigServidores.ResumeLayout(false);
+            gbConfigAtualizadores.ResumeLayout(false);
             cmsMarcarDesmarcar.ResumeLayout(false);
+            gbConfigServidores.ResumeLayout(false);
             gbConfigClientes.ResumeLayout(false);
             tabSobre.ResumeLayout(false);
             gbSobre.ResumeLayout(false);
             gbSobre.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvColaboradores).EndInit();
-            gbConfigAtualizadores.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -816,8 +860,6 @@
         private CheckedListBox cbGroupAtualizadores;
         private CheckedListBox cbGroupClientes;
         private CheckedListBox cbGroupServidores;
-        private GroupBox gbLog;
-        private ListBox lbLog;
         private NotifyIcon icBandeja;
         private GroupBox gbSobre;
         private Label label2;
@@ -828,8 +870,6 @@
         private Label label5;
         private LinkLabel linkLabel1;
         private GroupBox groupBox2;
-        private ListBox lbLogServidores;
-        private Button btnLimparLog;
         private Button btnIniciar;
         private CheckBox cbSelecionarParados;
         private CheckBox cbEmExecucao;
@@ -859,5 +899,12 @@
         private GroupBox gbConfigAtualizadores;
         private CheckedListBox clbAtualizadores;
         private Button btnAdicionarAtualizador;
+        private GroupBox gbLog;
+        private RichTextBox rtbLog;
+        private Button btnLimparLog;
+        private RichTextBox rtbLogServidores;
+        private Button btnMostrarTodos;
+        private Button btnFiltrarSucesso;
+        private Button btnFiltrarErros;
     }
 }
